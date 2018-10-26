@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: F3F3F3;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.microapps.ebusiness.mystore.application.controller.HomeController">
+   <children>
+      <VBox prefHeight="600.0" prefWidth="500.0">
+         <children>
+            <Pane prefHeight="86.0" prefWidth="500.0" style="-fx-background-color: B6CFF7;">
+               <children>
+                  <MenuBar fx:id="menuBar" layoutY="61.0" prefHeight="25.0" prefWidth="500.0">
+                    <menus>
+                      <Menu mnemonicParsing="false" text="File">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="Export customer data" onAction="#exportCustomerDataCsv" />
+                          <MenuItem mnemonicParsing="false" text="Import customer data" onAction="#importCustomerDataCsv" />
+                          <MenuItem mnemonicParsing="false" text="Import Item Master" onAction="#importItemMasterDataCsv" />
+<!--                               <MenuItem mnemonicParsing="false" text="Backup DB" />
+ -->                              <MenuItem mnemonicParsing="false" text="Exit" onAction="#exitApp" />
+                        </items>
+                      </Menu>
+                       <Menu mnemonicParsing="false" text="Settings">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="App settings" onAction="#handleAppSettings"/>
+                        </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Metrics">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="Sales report" onAction="#showSalesReport"/>
+                        </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Help">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="About" onAction="#showAboutApp" />
+                          <MenuItem mnemonicParsing="false" text="Help document" onAction="#showHelp" /> 
+                        </items>
+                      </Menu>
+                    </menus>
+                  </MenuBar>
+                  <Label fx:id="userName" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="262.0" layoutY="1.0" prefHeight="30.0" prefWidth="233.0" text="User Name" textFill="#a19d9d" />
+                  <Hyperlink alignment="CENTER_RIGHT" layoutX="419.0" layoutY="31.0" onAction="#handleLogout" prefHeight="23.0" prefWidth="75.0" text="Logout" textFill="#948080" underline="true" />
+                  <Label fx:id="imageLabel" layoutX="10.0" layoutY="10.0" prefHeight="43.0" prefWidth="58.0" text="" />
+               </children>
+           </Pane>
+            <Pane layoutX="10.0" layoutY="10.0" prefHeight="474.0" prefWidth="500.0" style="-fx-border-color: B1AEEC;">
+               <children>
+                  <VBox layoutX="3.0" layoutY="4.0" prefHeight="466.0" prefWidth="493.0" style="-fx-border-color: B1AEEC;">
+                     <children>
+                        <Pane prefHeight="68.0" prefWidth="491.0">
+                           <children>
+                              <Label layoutX="4.0" layoutY="6.0" prefHeight="17.0" prefWidth="121.0" text="Search customer" textFill="#948282" />
+                              <TextField fx:id="searchField" layoutX="5.0" layoutY="30.0" prefHeight="30.0" prefWidth="370.0">
+                                 <effect>
+                                    <InnerShadow color="#e6eaff" />
+                                 </effect>
+                              </TextField>
+                              <Button fx:id="searchButton" layoutX="379.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleSearch" prefHeight="30.0" prefWidth="106.0" text="Search" textFill="#9397a1" />
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="56.0" prefWidth="486.0">
+                           <children>
+                              <Button layoutX="379.0" layoutY="11.0" mnemonicParsing="false" onAction="#createCustomer" prefHeight="30.0" prefWidth="106.0" text="Create customer" textFill="#948d8d" />
+                              <Label fx:id="progressText" alignment="BOTTOM_LEFT" layoutX="7.0" layoutY="2.0" prefHeight="17.0" prefWidth="363.0" textFill="#908080">
+                                 <font>
+                                    <Font size="11.0" />
+                                 </font></Label>
+                              <ProgressIndicator fx:id="progressIndicator" layoutX="6.0" layoutY="21.0" prefHeight="23.0" prefWidth="20.0" visible="false" />
+                           </children>
+                        </Pane>
+                        <Pane layoutX="11.0" layoutY="79.0" prefHeight="33.0" prefWidth="491.0">
+                           <children>
+                              <Separator layoutX="-4.0" layoutY="-1.0" prefWidth="495.0" />
+                              <Label alignment="BOTTOM_LEFT" layoutX="7.0" layoutY="2.0" prefHeight="23.0" prefWidth="131.0" text="Total active customers :" textFill="#908080" />
+                              <Label fx:id="totalActiveCustomers" alignment="BOTTOM_LEFT" layoutX="141.0" layoutY="2.0" prefHeight="23.0" prefWidth="131.0" textFill="#908080" />
+                           </children>
+                        </Pane>
+                        <TableView fx:id="customersTable" prefHeight="322.0" prefWidth="491.0">
+                          <columns>
+                             <TableColumn fx:id="customerNameColumn" prefWidth="200.0" text="Name" />
+                             <TableColumn fx:id="dateColumn" prefWidth="130.0" text="Since" />
+                             <TableColumn fx:id="amountColumn" prefWidth="150.0" text="Total purchase (INR)" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </children>
+            </Pane>
+            <Pane prefHeight="44.0" prefWidth="500.0" style="-fx-background-color: C4C4C4;">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="TEXT_ONLY" layoutY="-1.0" lineSpacing="1.0" prefHeight="43.0" prefWidth="500.0" text="Copyright @2018. All rights reserved&#10;Visit us @ facebook/edudotcom" textAlignment="JUSTIFY" textFill="#807d7d">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

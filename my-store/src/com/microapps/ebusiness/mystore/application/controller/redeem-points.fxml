@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="244.0" prefWidth="408.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.microapps.ebusiness.mystore.application.controller.RedemptionController">
+   <children>
+      <Label layoutX="18.0" layoutY="2.0" prefHeight="36.0" prefWidth="150.0" text="Redeem points" textFill="#8d8686">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <GridPane layoutX="10.0" layoutY="43.0" prefHeight="143.0" prefWidth="381.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="226.0" minWidth="10.0" prefWidth="226.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="306.0" minWidth="10.0" prefWidth="155.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="79.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="47.0" minHeight="23.0" prefHeight="37.0" />
+          <RowConstraints maxHeight="95.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="95.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label prefHeight="24.0" prefWidth="130.0" text="Total points accrued : " textFill="#8d8686">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+            </Label>
+            <Label prefHeight="24.0" prefWidth="171.0" text="Points carry forward : " textFill="#8d8686" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+            </Label>
+            <Label prefHeight="24.0" prefWidth="188.0" text="Eligible points for redemption : " textFill="#8d8686" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+            </Label>
+            <Label fx:id="totalPointsAccrued" prefHeight="26.0" prefWidth="216.0" text="t pts" GridPane.columnIndex="1" />
+            <Label fx:id="eligiblePointsForRedemption" prefHeight="23.0" prefWidth="126.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="pointsCarryForward" prefHeight="29.0" prefWidth="139.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label prefHeight="24.0" prefWidth="198.0" text="Equivalent amount (redemption): " textFill="#8d8686" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+            </Label>
+            <Label fx:id="equivalentAmountOfRedemption" prefHeight="25.0" prefWidth="129.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         </children>
+      </GridPane>
+      <Separator layoutY="36.0" prefWidth="400.0" />
+      <Pane layoutX="45.0" layoutY="197.0" prefHeight="36.0" prefWidth="363.0">
+         <children>
+            <Button layoutX="90.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleRedeem" prefHeight="25.0" prefWidth="139.0" text="Confirm and proceed" />
+            <Button layoutX="244.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="25.0" prefWidth="105.0" text="Cancel" />
+         </children>
+      </Pane>
+      <Separator layoutX="2.0" layoutY="192.0" prefHeight="3.0" prefWidth="400.0" />
+   </children>
+</AnchorPane>

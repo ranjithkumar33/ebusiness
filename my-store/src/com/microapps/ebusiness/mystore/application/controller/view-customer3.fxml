@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: F3F3F3;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.microapps.ebusiness.mystore.application.controller.CustomerDetailsController">
+   <children>
+      <VBox prefHeight="600.0" prefWidth="500.0">
+         <children>
+            <Pane prefHeight="86.0" prefWidth="500.0" style="-fx-background-color: B6CFF7;">
+               <children>
+                <MenuBar fx:id="menuBar" layoutY="61.0" prefHeight="25.0" prefWidth="500.0">
+                    <menus>
+                      <Menu mnemonicParsing="false" text="File">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="Export customer data" onAction="#exportCustomerDataCsv" />
+                          <MenuItem mnemonicParsing="false" text="Import customer data" onAction="#importCustomerDataCsv" />
+                          <MenuItem mnemonicParsing="false" text="Import Item Master" onAction="#importItemMasterDataCsv" />
+<!--                               <MenuItem mnemonicParsing="false" text="Backup DB" />
+ -->                              <MenuItem mnemonicParsing="false" text="Exit" onAction="#exitApp" />
+                        </items>
+                      </Menu>
+                       <Menu mnemonicParsing="false" text="Settings">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="App settings" onAction="#handleAppSettings"/>
+                        </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Help">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="About" onAction="#showAboutApp" />
+                           <!-- <MenuItem mnemonicParsing="false" text="Data import template" onAction="#showDataImportTemplate" /> -->
+                        </items>
+                      </Menu>
+                    </menus>
+                  </MenuBar>
+                  <Label fx:id="userName" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="262.0" layoutY="1.0" prefHeight="30.0" prefWidth="233.0" text="User Name" textFill="#a19d9d" />
+                  <Hyperlink alignment="CENTER_RIGHT" layoutX="419.0" layoutY="31.0" onAction="#handleLogout" prefHeight="23.0" prefWidth="75.0" text="Logout" textFill="#948080" underline="true" />
+                  <Label fx:id="imageLabel" layoutX="10.0" layoutY="10.0" prefHeight="43.0" prefWidth="58.0" text="" />
+               </children>
+           </Pane>
+            <ScrollPane prefHeight="474.0" prefWidth="500.0">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="471.0" prefWidth="496.0" style="-fx-border-color: B1AEEC;">
+                     <children>
+                        <VBox layoutX="4.0" layoutY="3.0" prefHeight="465.0" prefWidth="489.0" style="-fx-border-color: B1AEEC;">
+                           <children>
+                              <Pane prefHeight="153.0" prefWidth="487.0">
+                                 <children>
+                                    <Label fx:id="name" layoutX="5.0" prefHeight="20.0" prefWidth="389.0" textFill="#8d8686">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="customerClassIcon" layoutX="420.0" prefHeight="43.0" prefWidth="58.0" text="" />
+                                    <AnchorPane prefHeight="134.0" prefWidth="487.0">
+                                       <children>
+                                          <VBox layoutY="33.0" prefHeight="115.0" prefWidth="487.0">
+                                             <children>
+                                                <Pane prefHeight="28.0" prefWidth="449.0">
+                                                   <children>
+                                                      <Label layoutX="6.0" prefHeight="17.0" prefWidth="87.0" text="Card number :" textFill="#838080" />
+                                                      <Label fx:id="cardNumber" layoutX="105.0" prefHeight="17.0" prefWidth="219.0" text="" textFill="#797272" />
+                                                   </children>
+                                                </Pane>
+                                                <Pane prefHeight="28.0" prefWidth="449.0">
+                                                   <children>
+                                                      <Label layoutX="6.0" prefHeight="17.0" prefWidth="87.0" text="Mobile :" textFill="#838080" />
+                                                      <Label fx:id="mobile" layoutX="105.0" prefHeight="17.0" prefWidth="219.0" text="" textFill="#797272" />
+                                                   </children>
+                                                </Pane>
+                                                <Pane prefHeight="28.0" prefWidth="449.0">
+                                                   <children>
+                                                      <Label layoutX="6.0" prefHeight="17.0" prefWidth="87.0" text="Email :" textFill="#838080" />
+                                                      <Label fx:id="email" layoutX="105.0" prefHeight="17.0" prefWidth="219.0" text="" textFill="#797272" />
+                                                   </children>
+                                                </Pane>
+                                                <Pane layoutX="10.0" layoutY="10.0" prefHeight="28.0" prefWidth="449.0">
+                                                   <children>
+                                                      <Label layoutX="6.0" prefHeight="17.0" prefWidth="87.0" text="DoB :" textFill="#838080" />
+                                                      <Label fx:id="dob" layoutX="105.0" prefHeight="17.0" prefWidth="219.0" text="" textFill="#797272" />
+                                                   </children>
+                                                </Pane>
+                                                <Pane prefHeight="28.0" prefWidth="449.0">
+                                                   <children>
+                                                      <Label layoutX="6.0" prefHeight="17.0" prefWidth="87.0" text="Gender :" textFill="#838080" />
+                                                      <Label fx:id="gender" layoutX="105.0" prefHeight="17.0" prefWidth="219.0" text="" textFill="#797272" />
+                                                   </children>
+                                                </Pane>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </Pane>
+                              <Separator prefWidth="200.0" />
+                              <Pane layoutX="11.0" layoutY="170.0" prefHeight="103.0" prefWidth="487.0">
+                                 <children>
+                                    <Label layoutX="7.0" prefHeight="17.0" prefWidth="81.0" text="Loyalty points" textFill="#8d8686">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </Label>
+                                    <AnchorPane layoutY="18.0" prefHeight="85.0" prefWidth="491.0">
+                                       <children>
+                                          <VBox layoutX="-1.0" prefHeight="80.0" prefWidth="491.0">
+                                             <children>
+                                                <Pane prefHeight="32.0" prefWidth="491.0">
+                                                   <children>
+                                                      <Label layoutX="8.0" layoutY="8.0" prefHeight="17.0" prefWidth="143.0" text="Loyalty points accrued : " textFill="#8d8787" />
+                                                      <Label fx:id="lpAccrued" layoutX="210.0" layoutY="8.0" prefHeight="17.0" prefWidth="138.0" text="" textFill="#9a9595" />
+                                                      <Hyperlink fx:id="redeemNowLink" onAction="#redeemLoyaltyPointsNow" visible="false" layoutX="371.0" layoutY="7.0" prefHeight="17.0" prefWidth="85.0" text="Redeem now" />
+                                                   </children>
+                                                </Pane>
+                                                <Pane layoutX="10.0" layoutY="10.0" prefHeight="34.0" prefWidth="491.0">
+                                                   <children>
+                                                      <Label layoutX="8.0" layoutY="8.0" prefHeight="17.0" prefWidth="246.0" text="Points required for redemption :" textFill="#8d8787" />
+                                                      <Label fx:id="lpRequiredForRedemption" layoutX="210.0" layoutY="9.0" prefHeight="17.0" prefWidth="113.0" text="" textFill="#9a9595" />
+                                                   </children>
+                                                </Pane>
+                                                <Pane layoutX="10.0" layoutY="42.0" prefHeight="34.0" prefWidth="491.0">
+                                                   <children>
+                                                      <Label layoutX="8.0" layoutY="8.0" prefHeight="17.0" prefWidth="143.0" text="Equivalent amount  :" textFill="#8d8787" />
+                                                      <Label fx:id="equivalentAmountForRedemption" layoutX="210.0" layoutY="9.0" prefHeight="17.0" prefWidth="136.0" text="" textFill="#9a9595" />
+                                                   </children>
+                                                </Pane>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                                    <Separator layoutY="103.0" prefWidth="488.0" />
+                                 </children>
+                              </Pane>
+                              <Pane layoutX="11.0" layoutY="167.0" prefHeight="204.0" prefWidth="487.0">
+                                 <children>
+                                    <Label layoutX="7.0" layoutY="2.0" prefHeight="17.0" prefWidth="137.0" text="Recent activities" textFill="#8d8686">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </Label>
+                                    <AnchorPane layoutY="27.0" prefHeight="100.0" prefWidth="491.0">
+                                       <children>
+                                          <VBox layoutX="-1.0" prefHeight="134.0" prefWidth="491.0">
+                                             <children>
+                                                <TableView fx:id="activityTable" prefHeight="132.0" prefWidth="491.0">
+                                                   <columns>
+                                                      <TableColumn fx:id="dateColumn" prefWidth="123.0" text="Date" />
+                                                      <TableColumn fx:id="activityTypeColumn" prefWidth="120.0" text="Activity" />
+                                                      <TableColumn fx:id="itemGroupColumn" prefWidth="120.0" text="Item Group" />
+                                                      <TableColumn fx:id="amountColumn" prefWidth="120.0" text="Amount (INR)" />
+                                                   </columns>
+                                                </TableView>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                                    <Pane layoutX="5.0" layoutY="163.0" prefHeight="37.0" prefWidth="479.0">
+                                       <children>
+                                          <Button layoutX="5.0" layoutY="4.0" mnemonicParsing="false" onAction="#addActivity" prefHeight="30.0" prefWidth="87.0" text="Add activity" textFill="#5b5656" />
+                                          <Button layoutX="272.0" layoutY="4.0" mnemonicParsing="false" onAction="#editCustomer" prefHeight="30.0" prefWidth="101.0" text="Edit" textFill="#5b5656" />
+                                          <Button layoutX="380.0" layoutY="4.0" mnemonicParsing="false" onAction="#goHome" prefHeight="30.0" prefWidth="94.0" text="Home" textFill="#5b5656" />
+                                       </children>
+                                    </Pane>
+                                 </children>
+                              </Pane>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </ScrollPane>
+            <Pane prefHeight="44.0" prefWidth="500.0" style="-fx-background-color: C4C4C4;">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="TEXT_ONLY" layoutY="-1.0" lineSpacing="1.0" prefHeight="43.0" prefWidth="500.0" text="Copyright @2018. All rights reserved&#10;Visit us @ facebook/edudotcom" textAlignment="JUSTIFY" textFill="#807d7d">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

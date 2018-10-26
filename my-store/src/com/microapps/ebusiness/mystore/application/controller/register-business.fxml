@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane style="-fx-background-color: F3F3F3;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.microapps.ebusiness.mystore.application.controller.BusinessRegistrationController">
+   <children>
+      <VBox prefHeight="600.0" prefWidth="500.0">
+         <children>
+            <Pane prefHeight="61.0" prefWidth="500.0" style="-fx-background-color: B6CFF7;">
+               <children>
+                  <Label fx:id="imageLabel" layoutX="10.0" layoutY="10.0" prefHeight="43.0" prefWidth="58.0" textFill="#4982e4">
+                  </Label>
+               </children></Pane>
+            <Pane layoutX="10.0" layoutY="10.0" prefHeight="498.0" prefWidth="500.0">
+               <children>
+                  <VBox layoutX="42.0" layoutY="18.0" prefHeight="447.0" prefWidth="398.0">
+                     <children>
+                        <AnchorPane prefHeight="414.0" prefWidth="380.0">
+                           <children>
+                              <VBox layoutX="7.0" layoutY="6.0" prefHeight="406.0" prefWidth="390.0" style="-fx-border-color: B6CFF7;">
+                                 <children>
+                                    <Pane prefHeight="38.0" prefWidth="460.0" style="-fx-background-color: B6CFF7;">
+                                       <children>
+                                          <Label layoutX="9.0" layoutY="6.0" prefHeight="21.0" prefWidth="126.0" text="Register business" textFill="#7b86cd">
+                                             <font>
+                                                <Font name="Arial" size="14.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </Pane>
+                                    <Pane prefHeight="64.0" prefWidth="460.0">
+                                       <children>
+                                          <Label layoutX="5.0" prefHeight="31.0" prefWidth="153.0" text="Your name" textFill="#948787">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="ownerName" layoutX="7.0" layoutY="31.0" prefHeight="25.0" prefWidth="376.0" />
+                                          <Label layoutX="82.0" layoutY="7.0" prefHeight="17.0" prefWidth="299.0" fx:id="nameError" visible="false">
+                                             <font>
+                                                <Font size="11.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </Pane>
+                                    <Pane prefHeight="58.0" prefWidth="460.0">
+                                       <children>
+                                          <Label layoutX="5.0" layoutY="-2.0" prefHeight="25.0" prefWidth="113.0" text="Company name" textFill="#888990">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="companyName" layoutX="5.0" layoutY="27.0" prefHeight="25.0" prefWidth="376.0" />
+                                          <Label layoutX="104.0" layoutY="3.0" prefHeight="17.0" fx:id="businessNameError" prefWidth="277.0" text="Label" visible="false">
+                                             <font>
+                                                <Font size="11.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </Pane>
+                                    <Pane layoutX="11.0" layoutY="113.0" prefHeight="117.0" prefWidth="460.0">
+                                       <children>
+                                          <Label layoutX="5.0" layoutY="-2.0" prefHeight="25.0" prefWidth="113.0" text="Company address" textFill="#888990">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Label>
+                                          <TextArea fx:id="companyAddress" layoutX="7.0" layoutY="25.0" prefHeight="86.0" prefWidth="376.0" />
+                                       </children>
+                                    </Pane>
+                                    <Pane layoutX="11.0" layoutY="179.0" prefHeight="66.0" prefWidth="287.0">
+                                       <children>
+                                          <Label layoutX="5.0" layoutY="-2.0" prefHeight="25.0" prefWidth="113.0" text="Activation code" textFill="#888990">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="activationCode" layoutX="5.0" layoutY="27.0" prefHeight="25.0" prefWidth="376.0" />
+                                          <Label layoutX="104.0" layoutY="3.0" prefHeight="17.0" fx:id="activationCodeError" prefWidth="277.0" text="Label" visible="false">
+                                             <font>
+                                                <Font size="11.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </Pane>
+                                    <Pane prefHeight="42.0" prefWidth="388.0">
+                                       <children>
+                                          <Button fx:id="registerAndActivateButton" layoutX="96.0" layoutY="9.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="165.0" style="-fx-focus-color: B6CFF7;" text="Register and Activate" textFill="#796e6e" />
+                                          <Button fx:id="resetButton" layoutX="273.0" layoutY="9.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="105.0" style="-fx-focus-color: B6CFF7;" text="Reset" textFill="#807575" />
+                                          <Label fx:id="loginErrorMsg" layoutX="7.0" layoutY="3.0" prefHeight="17.0" prefWidth="265.0" textFill="#eb3144">
+                                             <font>
+                                                <Font size="11.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </Pane>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </VBox>
+               </children>
+            </Pane>
+            <Pane prefHeight="44.0" prefWidth="500.0" style="-fx-background-color: C4C4C4;">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="TEXT_ONLY" layoutY="-1.0" lineSpacing="1.0" prefHeight="43.0" prefWidth="500.0" text="Copyright @2018 Edu.com. All rights reserved&#10;Visit us @ facebook/edudotcom" textAlignment="JUSTIFY" textFill="#757171">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
