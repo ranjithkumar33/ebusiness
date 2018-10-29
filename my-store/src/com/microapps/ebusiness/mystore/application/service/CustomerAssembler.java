@@ -48,6 +48,10 @@ public class CustomerAssembler {
 		dto.setId((int)e.getId());
 		dto.setMobile(e.getMobile());
 		dto.setName(e.getName());
+		if(e.getTotalPurchaseAmount() != null) {
+			dto.setTotalPurchaseAmount(e.getTotalPurchaseAmount());
+		}
+		dto.setActivities(ActivityAssembler.toActivityDtoList(e.getActivities()));
 		return dto;
 	}
 

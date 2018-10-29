@@ -8,7 +8,7 @@ import java.util.List;
 public class CustomerDto {
 	
 	public CustomerDto() {
-		
+		this.activities = new ArrayList<>();
 	}
 	
 	public CustomerDto(int id, String name, String gender, double totalPurchaseAmount, Timestamp createdOn) {

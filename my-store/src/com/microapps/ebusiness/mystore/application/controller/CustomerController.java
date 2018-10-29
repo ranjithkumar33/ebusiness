@@ -3,18 +3,19 @@ package com.microapps.ebusiness.mystore.application.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.microapps.ebusiness.mystore.application.dao.exception.DuplicateEntryException;
+import com.microapps.ebusiness.mystore.application.dao.exception.DuplicateEntryField;
 import com.microapps.ebusiness.mystore.application.domain.CustomerDto;
-import com.microapps.ebusiness.mystore.application.exception.DuplicateEntryException;
+import com.microapps.ebusiness.mystore.application.exception.ValidationFailedException;
 import com.microapps.ebusiness.mystore.application.service.CustomerService;
 import com.microapps.ebusiness.mystore.application.service.SecurityContext;
+import com.microapps.ebusiness.mystore.application.service.ValidationUtil;
 import com.microapps.ebusiness.mystore.application.util.DateConvertor;
-import com.microapps.ebusiness.mystore.application.util.DuplicateEntryField;
 import com.microapps.ebusiness.mystore.application.util.UIValidationUtils;
 import com.microapps.ebusiness.mystore.application.util.ViewTemplateConstants;
 
@@ -134,18 +135,25 @@ public class CustomerController extends BaseController implements Initializable,
 		if(null == selectedGender) {
 			return;	
 		}
+		
+		
 		char gender = selectedGender.getText().charAt(0);
 		
 		LocalDate date = dob.getValue();
 		
 			try {
-				cs.saveCustomer(new CustomerDto(name.getText(), mobile.getText(), email.getText(), cardNumber.getText(), gender, Date.valueOf(date)));
 				
-				Router.getRouter().route("view-customer").showView(getStage(event));
+				CustomerDto c = new CustomerDto(name.getText(), mobile.getText(), email.getText(), cardNumber.getText(), gender, Date.valueOf(date));
+				if(ValidationUtil.validate(c)) {
+					
+					cs.saveCustomer(c);
+					
+					Router.getRouter().route("view-customer").showView(getStage(event));
+				}
+			
 				
-			} catch (NumberFormatException | NullPointerException e) {
-				
-				/*if(e instanceof DuplicateEntryException) {
+			} catch (DuplicateEntryException | NullPointerException e) {
+				if(e instanceof DuplicateEntryException) {
 					DuplicateEntryField def = DuplicateEntryField.findFieldByKey(((DuplicateEntryException) e).getKey());
 					switch(def) {
 					  case mobile:
@@ -163,8 +171,12 @@ public class CustomerController extends BaseController implements Initializable,
 					}
 				}else if(e instanceof NullPointerException) {
 					LOGGER.log(Level.SEVERE, "No values entered!");
-				}*/
+				}
 				
+			}catch (ValidationFailedException e) {
+				 LOGGER.log(Level.SEVERE, "No values entered!", e.getMessage());
+				  hasValidationError = true;
+				  saveButton.setDisable(true);
 			}
 			
 	

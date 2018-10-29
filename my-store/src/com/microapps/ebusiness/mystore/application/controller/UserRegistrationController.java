@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import com.microapps.ebusiness.mystore.application.exception.DuplicateEntryException;
 import com.microapps.ebusiness.mystore.application.exception.RegistrationFailedException;
 import com.microapps.ebusiness.mystore.application.service.RegistrationService;
 import com.microapps.ebusiness.mystore.application.util.UIValidationUtils;

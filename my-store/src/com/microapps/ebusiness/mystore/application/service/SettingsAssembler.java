@@ -13,6 +13,7 @@ public class SettingsAssembler {
 			dto.setMpf(e.getMpf());
 			dto.setPmf(e.getPmf());
 			dto.setRtp(e.getRtp());
+			dto.setId(e.getId());
 			return dto;
 		}
 		
@@ -24,6 +25,7 @@ public class SettingsAssembler {
 			s.setMpf(dto.getMpf());
 			s.setPmf(dto.getPmf());
 			s.setRtp(dto.getRtp());
+			s.setId(dto.getId());
 			s.setStatus(true);
 			return s;
 		}

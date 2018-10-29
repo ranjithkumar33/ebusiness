@@ -227,7 +227,7 @@ public class CustomerDetailsController extends BaseController implements Initial
 	private void showLoyaltyPointsRedemptionDialog(ActionEvent event) {
 		RedemptionController ac = (RedemptionController) Router.getRouter().route("redeem-points");
 		ac.showView(getStage(event));
-		setLoyaltyData(Session.getSession().getCustomerFromSession());
+		setCustomerData();
 	}
 
 	@FXML

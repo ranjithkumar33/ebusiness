@@ -1,8 +1,5 @@
 package com.microapps.ebusiness.mystore.application.service;
 
-import java.sql.SQLException;
-import java.sql.Timestamp;
-
 import com.microapps.ebusiness.mystore.application.dao.SettingsDao;
 import com.microapps.ebusiness.mystore.application.dao.SettingsDaoImpl;
 import com.microapps.ebusiness.mystore.application.domain.AppSettingsDto;

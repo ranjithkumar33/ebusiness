@@ -3,17 +3,20 @@ package com.microapps.ebusiness.mystore.application.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import com.microapps.ebusiness.mystore.application.dao.exception.DuplicateEntryException;
+import com.microapps.ebusiness.mystore.application.dao.exception.DuplicateEntryField;
 import com.microapps.ebusiness.mystore.application.domain.CustomerDto;
-import com.microapps.ebusiness.mystore.application.exception.DuplicateEntryException;
+import com.microapps.ebusiness.mystore.application.exception.ValidationFailedException;
 import com.microapps.ebusiness.mystore.application.service.CustomerService;
 import com.microapps.ebusiness.mystore.application.service.SecurityContext;
 import com.microapps.ebusiness.mystore.application.service.Session;
+import com.microapps.ebusiness.mystore.application.service.ValidationUtil;
 import com.microapps.ebusiness.mystore.application.util.DateConvertor;
-import com.microapps.ebusiness.mystore.application.util.DuplicateEntryField;
 import com.microapps.ebusiness.mystore.application.util.UIValidationUtils;
 import com.microapps.ebusiness.mystore.application.util.ViewTemplateConstants;
 
@@ -36,6 +39,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class EditCustomerController extends BaseController implements Initializable, Routeable{
+	
+	private static final Logger LOGGER = Logger.getLogger(EditCustomerController.class.getName());
 
 	private Parent rootNode;
 	
@@ -142,11 +147,15 @@ public class EditCustomerController extends BaseController implements Initializa
 		c.setDob(Date.valueOf(dob.getValue()));
 		
 			try {
-				cs.updateCustomer(c);
-				Router.getRouter().route("view-customer").showView(getStage(event));
 				
-			} catch (NumberFormatException e) {
-				/*if(e instanceof DuplicateEntryException) {
+				if(ValidationUtil.validate(c)) {
+					cs.updateCustomer(c);
+					Router.getRouter().route("view-customer").showView(getStage(event));
+					
+				}
+			
+			} catch (DuplicateEntryException | NullPointerException e) {
+				if(e instanceof DuplicateEntryException) {
 					DuplicateEntryField def = DuplicateEntryField.findFieldByKey(((DuplicateEntryException) e).getKey());
 					switch(def) {
 					  case mobile:
@@ -162,7 +171,11 @@ public class EditCustomerController extends BaseController implements Initializa
 		            	  cardError.setText(UIValidationUtils.DUPLICATE_CARD_NUMBER_ERROR);
 						break;
 					}
-				}*/
+				}
+			} catch (ValidationFailedException e) {
+				  LOGGER.log(Level.SEVERE, "No values entered!", e.getMessage());
+				  hasValidationError = true;
+				  saveButton.setDisable(true);
 			}
 			
 	}

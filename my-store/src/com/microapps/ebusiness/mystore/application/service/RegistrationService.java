@@ -18,7 +18,6 @@ import com.microapps.ebusiness.mystore.application.domain.Registration;
 import com.microapps.ebusiness.mystore.application.entity.Business;
 import com.microapps.ebusiness.mystore.application.entity.BusinessUser;
 import com.microapps.ebusiness.mystore.application.exception.BusinessNotRegisteredException;
-import com.microapps.ebusiness.mystore.application.exception.DuplicateEntryException;
 import com.microapps.ebusiness.mystore.application.exception.RegistrationFailedException;
 
 public class RegistrationService {

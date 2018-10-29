@@ -1,18 +1,17 @@
 package com.microapps.ebusiness.mystore.application.service;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.microapps.ebusiness.mystore.application.dao.ActivityDao;
 import com.microapps.ebusiness.mystore.application.dao.ActivityDaoImpl;
 import com.microapps.ebusiness.mystore.application.dao.CustomerDao;
 import com.microapps.ebusiness.mystore.application.dao.CustomerDaoImpl;
+import com.microapps.ebusiness.mystore.application.dao.exception.DuplicateEntryException;
+import com.microapps.ebusiness.mystore.application.dao.exception.RecordNotFoundException;
 import com.microapps.ebusiness.mystore.application.domain.CustomerDto;
 import com.microapps.ebusiness.mystore.application.entity.Customer;
-import com.microapps.ebusiness.mystore.application.exception.DuplicateEntryException;
 
 public class CustomerService {
 	
@@ -43,17 +42,24 @@ public class CustomerService {
     }
 	
 	/*public List<CustomerDto> getAllCustomersForReport() {
-		   return cdao.findAllCustomersForCSV();
+		   return cdao.findAllCustomersForCSV();]
 	}*/
 	
 	public CustomerDto getCustomerById(int id)  {
-		Customer c = cdao.findCustomerById(id);
-		//c.setActivities(adao.findActivitiesByCustomer(c.getId()));
-		Session.getSession().addCustomerToSession(CustomerAssembler.toDto(c));
-		return Session.getSession().getCustomerFromSession();
+		Customer c;
+		try {
+			c = cdao.findCustomerById(id);
+			Session.getSession().addCustomerToSession(CustomerAssembler.toDto(c));
+			return Session.getSession().getCustomerFromSession();
+		} catch (RecordNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
 	}
 	
-   public CustomerDto saveCustomer(CustomerDto c)  {
+   public CustomerDto saveCustomer(CustomerDto c) throws DuplicateEntryException  {
 	    Customer _c = cdao.saveCustomer(CustomerAssembler.toEntity(c));
 	    Session.getSession().addCustomerToSession(CustomerAssembler.toDto(_c));
 		return Session.getSession().getCustomerFromSession();
@@ -64,7 +70,7 @@ public class CustomerService {
 		cdao.saveAllCustomers(CustomerAssembler.toEntityList(cl));
    }
    
-   public CustomerDto updateCustomer(CustomerDto c) {
+   public CustomerDto updateCustomer(CustomerDto c) throws DuplicateEntryException {
 	    Customer _c = cdao.saveCustomer(CustomerAssembler.toEntity(c));
 	    Session.getSession().addCustomerToSession(CustomerAssembler.toDto(_c));
 		return Session.getSession().getCustomerFromSession();

@@ -97,7 +97,7 @@ public class Main extends Application {
 	    public void start(Stage stage) throws Exception {
 	    	stage.setScene(new Scene(rootNode));
 	    	stage.getIcons().add(new Image(getClass().getResourceAsStream("my-shop-ico-3.png")));
-	    	stage.setTitle("MyShop-v1.0.0");
+	    	stage.setTitle("MyStore-v1.0.0");
 	        stage.show();
 	    }
 }
