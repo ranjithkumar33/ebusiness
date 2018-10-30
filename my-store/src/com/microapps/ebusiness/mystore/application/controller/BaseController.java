@@ -1,13 +1,6 @@
 package com.microapps.ebusiness.mystore.application.controller;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
@@ -19,11 +12,14 @@ import com.microapps.ebusiness.mystore.application.service.ItemGroupService;
 import com.microapps.ebusiness.mystore.application.util.CustomerDataCsvParcer;
 import com.microapps.ebusiness.mystore.application.util.HostServiceUtil;
 import com.microapps.ebusiness.mystore.application.util.ItemMasterDataCsvParcer;
+import com.microapps.ebusiness.mystore.application.util.ViewTemplateConstants;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
@@ -31,6 +27,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -120,21 +117,14 @@ public class BaseController{
 	
 	@FXML
 	private void importCustomerDataCsv(ActionEvent event) {
-		FileChooser fileChooser = new FileChooser();
-		Stage parentStage = (Stage)this.menuBar.getScene().getWindow();
-		File file = fileChooser.showOpenDialog(parentStage);
-		  if(file != null) {
-			try {
-				CustomerDataCsvParcer cp = new CustomerDataCsvParcer(file);
-				cp.parseFile();
-				cs.bulkCustomerDataImport(cp.getCustomers());
-				Router.getRouter().route("home").showView(parentStage);
-			} catch (CSVParseException e) {
-				e.printStackTrace();
-			}
-          }
+		showModalWithProgressBar(event);
 	}
 	
+	private void showModalWithProgressBar(ActionEvent event) {
+		Router.getRouter().route("data-import").showView((Stage)this.menuBar.getScene().getWindow());
+	}
+
+
 	@FXML
 	private void importItemMasterDataCsv(ActionEvent event) {
 		FileChooser fileChooser = new FileChooser();
