@@ -19,7 +19,8 @@ public class Router {
 		contrls.put("app-settings", new AppSettingsController());
 		contrls.put("redeem-points", new RedemptionController());
 		contrls.put("sales-report", new SalesReportDlgController());
-		contrls.put("data-import", new ModalWithProgressBarController());
+		contrls.put("data-import", new CustomerDataImportController());
+		contrls.put("sales-data-sync", new SalesDataSyncController());
 	}
 	
 	private static Router router;

@@ -8,6 +8,8 @@ import java.util.ResourceBundle;
 import com.microapps.ebusiness.mystore.application.exception.CSVParseException;
 import com.microapps.ebusiness.mystore.application.service.CustomerService;
 import com.microapps.ebusiness.mystore.application.util.CustomerDataCsvParcer;
+import com.microapps.ebusiness.mystore.application.util.Parser;
+import com.microapps.ebusiness.mystore.application.util.ViewTemplateConstants;
 
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -24,7 +26,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class ModalWithProgressBarController extends BaseController implements Initializable, Routeable{
+public class CustomerDataImportController extends BaseController implements Initializable, Routeable{
+	
+	public CustomerDataImportController(){
+		
+	}
 	
 	private Stage rootNode;
 	
@@ -46,10 +52,12 @@ public class ModalWithProgressBarController extends BaseController implements In
 	
 	private Stage dialogStage;
 	
-	private CustomerDataCsvParcer cp;
+	protected Parser cp;
+	
+	private Task<Void> task;
 	
 	@FXML
-	private void handleImport(ActionEvent event) {
+	protected void handleImport(ActionEvent event) {
 		
 		((Button)event.getSource()).setDisable(true);
 		
@@ -57,35 +65,34 @@ public class ModalWithProgressBarController extends BaseController implements In
 		
 		progressBar.progressProperty().unbind();
 		
-		Task<Void> t = createTask();
+		progressBar.progressProperty().bind(task.progressProperty());
 		
-		progressBar.progressProperty().bind(t.progressProperty());
-		
-	   new Thread(t).start();
+	   new Thread(task).start();
 	   
 	   progressBar.setVisible(true);
 	   
-	   t.messageProperty().addListener((obs, oldMsg, newMsg) -> {
+	   task.messageProperty().addListener((obs, oldMsg, newMsg) -> {
 		   successMsg.setText(newMsg);
 		});
 	   
-	   t.setOnSucceeded(e->{
+	   task.setOnSucceeded(e->{
 			((Button)event.getSource()).setDisable(false);
 			progressBar.progressProperty().unbind();
 			successMsg.setText("Success : "+cp.getSuccessCount() + ", Error: " + cp.getErrorList().size() + ", Log : "+cp.getErroFile().getAbsolutePath());
 	   });
 	   
-	   t.setOnFailed(e->{
-		   ((Button)event.getSource()).setDisable(false);
+	   task.setOnFailed(e->{
+		  // ((Button)event.getSource()).setDisable(false);
 		   progressBar.progressProperty().unbind();
-		   successMsg.setText("Success : "+cp.getSuccessCount() + ", Error: " + cp.getErrorList().size() + ", Log : "+cp.getErroFile().getAbsolutePath());
+		   successMsg.setText("Error :  Can not parse the file");
+		   progressBar.progressProperty().unbind();
+		   progressBar.setProgress(0);
 	   });
 	}
 	
-	private Task<Void> createTask() {
-        return new Task<Void>() {
-
-            @Override
+	protected void createTask() {
+		this.task = new Task<Void>() {
+          @Override
             protected Void call() throws Exception {
                 try {
 					cp = new CustomerDataCsvParcer(file, new CustomerService());
@@ -99,21 +106,19 @@ public class ModalWithProgressBarController extends BaseController implements In
 					
 					
 				} catch (CSVParseException e) {
-					e.printStackTrace();
+					throw e;
 				} catch (IOException e) {
-					e.printStackTrace();
+					throw e;
 				}
 
                 return null;
             }
-
-            
         }; 
     }        
 
 	
 	@FXML
-	private void close() {
+	public void close() {
 		this.dialogStage.close();
 	}
 	
@@ -121,7 +126,7 @@ public class ModalWithProgressBarController extends BaseController implements In
 	public void showView(Stage stage) {
 		Stage dialogStage = new Stage();
 		
-		FXMLLoader fxmlLoader = new FXMLLoader(BaseController.class.getResource("ModalWithProgressBar.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(BaseController.class.getResource(ViewTemplateConstants.CUSTOMER_DATA_IMPORT_VIEW));
 			try {
 				Parent rootNode = fxmlLoader.load();
 				dialogStage.setTitle("Import data");
@@ -130,7 +135,7 @@ public class ModalWithProgressBarController extends BaseController implements In
 		        Scene scene = new Scene(rootNode);
 		        dialogStage.setScene(scene);
 		             
-		        ModalWithProgressBarController ac = fxmlLoader.getController();
+		        CustomerDataImportController ac = fxmlLoader.getController();
 		        ac.setDialogStage(dialogStage);
 		        
 		        dialogStage.showAndWait();
@@ -153,15 +158,23 @@ public class ModalWithProgressBarController extends BaseController implements In
 	        }
         });
 
-		
+		createTask();
 	}
 	
-	private void setDialogStage(Stage stage) {
+	public void setDialogStage(Stage stage) {
 		this.dialogStage=stage;
 	}
 	
 	public Stage getDialogStage() {
 		return this.dialogStage;
+	}
+
+	public Task<Void> getTask() {
+		return task;
+	}
+
+	public void setTask(Task<Void> task) {
+		this.task = task;
 	}
 
 }

@@ -1,11 +1,13 @@
 package com.microapps.ebusiness.mystore.application;
 	
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.microapps.ebusiness.mystore.application.controller.BaseController;
 import com.microapps.ebusiness.mystore.application.dao.PersistanceUtil;
 import com.microapps.ebusiness.mystore.application.exception.BusinessNotRegisteredException;
+import com.microapps.ebusiness.mystore.application.service.GeneralService;
 import com.microapps.ebusiness.mystore.application.service.RegistrationService;
 import com.microapps.ebusiness.mystore.application.util.HostServiceUtil;
 import com.microapps.ebusiness.mystore.application.util.ViewTemplateConstants;
@@ -26,19 +28,34 @@ public class Main extends Application {
 	    private Parent rootNode;
 	    
 	    private static RegistrationService regService;
+	    
+	    private static GeneralService gs;
 
 	    public static void main(final String[] args) {
 	    	LOGGER.info("Starting appplication...");
 	    	regService = new RegistrationService();
+	    	gs = new GeneralService();
 	        Application.launch(args);
 	    }
 	    
 	    @Override
 	    public void stop() throws Exception {
 	    	clean();
+	    	backUpDB();
 	    }
 
-	    @Override
+	    
+	    private void backUpDB() {
+	    	LOGGER.log(Level.INFO, "Backup DB..");
+	    	try {
+				gs.backupDb();
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, "Failed backup > "+e.getMessage());
+			}
+	    	LOGGER.log(Level.INFO, "Backup DB completed.");
+		}
+
+		@Override
 	    public void init() throws Exception {
 	    	  startUpDb();
 	    	  FXMLLoader fxmlLoader = null;

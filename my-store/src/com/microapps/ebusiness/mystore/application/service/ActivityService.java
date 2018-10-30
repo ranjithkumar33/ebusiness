@@ -1,5 +1,7 @@
 package com.microapps.ebusiness.mystore.application.service;
 
+import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.logging.Logger;
 
 import com.microapps.ebusiness.mystore.application.dao.ActivityDao;
@@ -21,7 +23,7 @@ public class ActivityService {
 	private CustomerDao cd;
 	
 	private LoyalyPointsService lps;
-
+	
 	public ActivityService() {
 		ad = new ActivityDaoImpl();
 		lps = new LoyalyPointsService();
@@ -46,6 +48,29 @@ public class ActivityService {
 		}
 	  
 		return _a;
+	}
+	
+	
+	
+	public int syncSalesData(List<ActivityDto> activityList, BiConsumer<Integer, Integer> progressUpdate, int totalWork, int completedWork) throws SettingNotFoundException, RecordNotFoundException {
+		if(activityList != null) {
+			for(ActivityDto a : activityList) {
+				a.setName(ActivityType.NEW_SALE.getName());
+				a.setEarnedPoints(lps.calculateEarnedPointsForActivity(a.getAmount(), ActivityType.NEW_SALE));
+				Activity _a = ActivityAssembler.toEntity(a);
+				
+				_a.setCreatedBy("DATA_SYNC");
+				_a.setCreatedOn(a.getCreatedOn());
+				_a.setCustomer(cd.searchCustomerByMobile(a.getCustomer().getMobile()));
+				_a = ad.saveActivity(_a);
+				
+				if (progressUpdate != null) {
+	                progressUpdate.accept(completedWork, totalWork);
+	            }
+				completedWork++;
+			}
+		}
+		return completedWork;
 	}
 
 }

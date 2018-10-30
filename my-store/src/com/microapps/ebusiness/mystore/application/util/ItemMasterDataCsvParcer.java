@@ -36,7 +36,7 @@ public class ItemMasterDataCsvParcer {
 	public void parseFile() throws CSVParseException {
 		 String line = "";
 		 try {
-	            while ((line = br.readLine()) != null) {
+	            while ((line = br.readLine()) != null && !line.trim().isEmpty()) {
 	            	this.lp = new CsvLineParser(line);
 	            	lp.parseLine();
 	            	this.itemGroups.add(lp.getItemGroup());

@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 public class ActivityDto {
 	
-	public ActivityDto() {}
+	public ActivityDto() {this.customer=new CustomerDto();}
 	
 	public ActivityDto(String name, double amount) {
 		this.name=name;

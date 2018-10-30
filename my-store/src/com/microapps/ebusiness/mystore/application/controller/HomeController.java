@@ -229,6 +229,15 @@ public class HomeController extends BaseController implements Initializable, Rou
 	
 	@FXML
 	private void handleSearch(ActionEvent event) {
+		
+		if(null == searchField.getText() || searchField.getText().trim().length() == 0) {
+			hasValidationError = true;
+			progressText.setTextFill(Color.web("#eb3144"));
+			 progressText.setText("Please enter a value");
+			 searchButton.setDisable(true);
+			 return;
+		}
+		
 		progressIndicator.setVisible(true);
 		progressIndicator.setProgress(0);
 		progressText.setTextFill(Color.web("#948282"));

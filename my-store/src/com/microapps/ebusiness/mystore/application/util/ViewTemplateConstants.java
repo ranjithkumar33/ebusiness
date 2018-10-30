@@ -12,5 +12,6 @@ public interface ViewTemplateConstants {
 	String ADD_ACTIVITY_VIEW = "add-activity3.fxml";
 	String APP_SETTINGS_VIEW = "app-settings.fxml";
 	String REDEEM_POINTS_VIEW = "redeem-points.fxml";
-	
+	String CUSTOMER_DATA_IMPORT_VIEW = "customer-data-sync-modal.fxml";
+	String SALES_DATA_SYNC_VIEW = "sales-data-sync-modal.fxml";
 }

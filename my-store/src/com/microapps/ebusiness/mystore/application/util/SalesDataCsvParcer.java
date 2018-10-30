@@ -12,27 +12,28 @@ import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-import com.microapps.ebusiness.mystore.application.dao.exception.DuplicateEntryException;
-import com.microapps.ebusiness.mystore.application.dao.exception.DuplicateEntryField;
-import com.microapps.ebusiness.mystore.application.domain.CustomerDto;
+import com.microapps.ebusiness.mystore.application.dao.exception.RecordNotFoundException;
+import com.microapps.ebusiness.mystore.application.domain.ActivityDto;
 import com.microapps.ebusiness.mystore.application.exception.CSVParseException;
-import com.microapps.ebusiness.mystore.application.service.CustomerService;
+import com.microapps.ebusiness.mystore.application.exception.SettingNotFoundException;
+import com.microapps.ebusiness.mystore.application.service.ActivityService;
 
-public class CustomerDataCsvParcer implements Parser{
+public class SalesDataCsvParcer implements Parser{
 	
-	private static final int ATTR_LENGTH = 6;
+	private static final int ATTR_LENGTH = 4;
 	
 	private static final String DELIMITER = ",";
 	
 	private LineNumberReader br;
 	
-	private CustomerService cs;
+	private ActivityService as;
 	
 	private CsvLineParser lp;
 	
@@ -56,7 +57,7 @@ public class CustomerDataCsvParcer implements Parser{
 	        this.progressMessage = progressMessage ;
 	 }
 	
-	public CustomerDataCsvParcer(File file, CustomerService cs) throws CSVParseException, IOException{
+	public SalesDataCsvParcer(File file, ActivityService as) throws CSVParseException, IOException{
 		if(null == file) throw new CSVParseException("File not found");
 		//C:\Users\Ranjith\Desktop\new-customersw.csv\new-customersw.csv_error.txt 
 		String errorFileName = "customer_data_import_error.txt";
@@ -66,8 +67,8 @@ public class CustomerDataCsvParcer implements Parser{
 		} catch (FileNotFoundException e) {
 			throw new CSVParseException("File not found");
 		}
-		this.totalLineCount = countTotalLines(file);
-		this.cs=cs;
+		this.totalLineCount = countTotalLines(file)*2;
+		this.as=as;
 		this.errorList=new ArrayList<>();
 	}
 	
@@ -96,42 +97,59 @@ public class CustomerDataCsvParcer implements Parser{
 		 String line = "";
 		 int cnt = 1;
 		 int sCount = 0;
+		 
+		 List<ActivityDto> activityList = new ArrayList<>();
 		 try {
 	            while ((line = br.readLine()) != null && !line.trim().isEmpty()) {
 	            	this.lp = new CsvLineParser(line);
-	            	try {
 	            		cnt++;
-	            		CustomerDto c = lp.parseLine();
-						
-						cs.saveCustomer(c);
+	            		ActivityDto a = lp.parseLine();
+	            		activityList.add(a);
 						sCount++;
 						
 						if (progressMessage != null) {
-							progressMessage.accept("Processing ", "Processing " +c.getName());
+							progressMessage.accept("Processing ", "Processing " +a.getCustomer().getMobile());
 			            }
 						
 						if (progressUpdate != null) {
 			                progressUpdate.accept(cnt, totalLineCount);
 			            }
-					} catch (DuplicateEntryException e) {
-
-						if (progressMessage != null) {
-							progressMessage.accept("Processing ", "Failed");
-			            }
-						
-						if (progressUpdate != null) {
-			                progressUpdate.accept(cnt, totalLineCount);
-			            }
-						this.errorList.add(generateErrorMessage(br.getLineNumber(), e.getKey(), e.getMessage()));
-					}
-	            	
 	            }
+	            if (progressMessage != null) {
+					progressMessage.accept("Processing ", "Parsing data file completed.");
+	            }
+	            
+	            if (progressMessage != null) {
+					progressMessage.accept("Processing ", "Start DB Syncing...");
+	            }
+	            
+	            try {
+	            	cnt = as.syncSalesData(activityList, progressUpdate, totalLineCount, cnt);
+					
+					if (progressUpdate != null) {
+		                progressUpdate.accept(cnt, totalLineCount);
+		            }
+					
+					if (progressMessage != null) {
+						progressMessage.accept("Processing ", "Completed successfully.");
+		            }
+					
+				} catch (SettingNotFoundException | RecordNotFoundException e) {
+					  if (progressMessage != null) {
+							progressMessage.accept("Processing ", "Start DB Syncing failed! "+e.getMessage());
+			          }
+				}
+	            
 
 	        } catch (FileNotFoundException e) {
 	        	throw new CSVParseException("File not found");
 	        } catch (IOException e) {
 	        	throw new CSVParseException("Error");
-	        } finally {
+	        }  catch (CSVParseException e) {
+	        	throw e;
+	        } catch (ParseException e) {
+	        	throw new CSVParseException(e.getMessage());
+			} finally {
 	            if (br != null) {
 	                try {
 	                    br.close();
@@ -148,11 +166,6 @@ public class CustomerDataCsvParcer implements Parser{
 	
 	public int getSuccessCount() {
 		return successCount;
-	}
-
-	private String generateErrorMessage(int lineNumber, int key, String message) {
-		DuplicateEntryField def = DuplicateEntryField.findFieldByKey(key);
-		return "Error parsing line "+lineNumber+" >> Duplicate record ("+def.toString()+")\n";
 	}
 
 	private void postProcess() {
@@ -202,72 +215,30 @@ public class CustomerDataCsvParcer implements Parser{
 		}
 		
 		
-		private CustomerDto parseLine() throws CSVParseException, DuplicateEntryException{
-			CustomerDto c = new CustomerDto();
+		private ActivityDto parseLine() throws ParseException{
+			ActivityDto a = new ActivityDto();
 			List<String> attList = Arrays.asList(this.attrs);
 			for(String attr : attList) {
 				
 				switch(this.curPos) {
-					case 0 : c.setName(attr);
+					case 0 : a.getCustomer().setMobile(attr);
 					this.curPos++;
 					break;
-					case 1 : c.setMobile(attr);
+					case 1 : a.setCreatedOn(Timestamp.valueOf(DateUtil.fromString(attr, true)));
 					this.curPos++;
 					break;
-					case 2 : c.setCardNumber(attr);
+					case 2 : a.setItemGroup(attr);
 					this.curPos++;
 					break;
-					case 3 : 
-						if(validGender(attr)) {
-							c.setGender(attr.charAt(0));
-						}
-					this.curPos++;
-					break;
-					case 4 : 
-						if(isValidDoB(attr)) {
-							c.setDob(Date.valueOf(DateUtil.fromString(attr)));
-						}
-					this.curPos++;
-					break;
-					case 5 : 
-						c.setEmail(attr);
+					case 3 : a.setAmount(Double.parseDouble(attr));
 					this.curPos++;
 					break;
 				}
 			}
 			
-			return c;
+			return a;
 			
 		}
-
-
-
-
-		private boolean isValidDoB(String attr) throws CSVParseException {
-			try {
-				Date.valueOf(DateUtil.fromString(attr));
-			} catch (Exception e) {
-				throw new CSVParseException("Invalid DoB");
-			}
-			return true;
-		}
-
-
-
-
-		private boolean validGender(String attr) throws CSVParseException {
-			if(attr.length() > 1) {
-				throw new CSVParseException("Invalid gender");
-			}
-			
-			Gender gen = Gender.getGender(attr.charAt(0));
-			if(gen== null) {
-				throw new CSVParseException("Gender should be a single character");
-			}
-			return true;
-			
-		}
-		
 	}
 
 

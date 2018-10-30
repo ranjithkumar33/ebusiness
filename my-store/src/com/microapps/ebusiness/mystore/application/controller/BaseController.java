@@ -9,17 +9,13 @@ import java.util.concurrent.ExecutionException;
 import com.microapps.ebusiness.mystore.application.exception.CSVParseException;
 import com.microapps.ebusiness.mystore.application.service.CustomerService;
 import com.microapps.ebusiness.mystore.application.service.ItemGroupService;
-import com.microapps.ebusiness.mystore.application.util.CustomerDataCsvParcer;
 import com.microapps.ebusiness.mystore.application.util.HostServiceUtil;
 import com.microapps.ebusiness.mystore.application.util.ItemMasterDataCsvParcer;
-import com.microapps.ebusiness.mystore.application.util.ViewTemplateConstants;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
@@ -27,7 +23,6 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -77,6 +72,11 @@ public class BaseController{
 		help.setTitle("About MyShop");
 		help.setHeaderText(null);
 		help.showAndWait();
+	}
+	
+	@FXML
+	private void syncSalesData() {
+		Router.getRouter().route("sales-data-sync").showView((Stage)this.menuBar.getScene().getWindow());
 	}
 	
 	@FXML

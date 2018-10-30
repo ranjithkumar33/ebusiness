@@ -20,9 +20,10 @@
                     <menus>
                       <Menu mnemonicParsing="false" text="File">
                         <items>
-                          <MenuItem mnemonicParsing="false" text="Export customer data" onAction="#exportCustomerDataCsv" />
-                          <MenuItem mnemonicParsing="false" text="Import customer data" onAction="#importCustomerDataCsv" />
+                          <MenuItem mnemonicParsing="false" text="Export Customer Data" onAction="#exportCustomerDataCsv" />
+                          <MenuItem mnemonicParsing="false" text="Import Customer Data" onAction="#importCustomerDataCsv" />
                           <MenuItem mnemonicParsing="false" text="Import Item Master" onAction="#importItemMasterDataCsv" />
+                          <MenuItem mnemonicParsing="false" text="Sync Sales Data" onAction="#syncSalesData" />
 <!--                               <MenuItem mnemonicParsing="false" text="Backup DB" />
  -->                              <MenuItem mnemonicParsing="false" text="Exit" onAction="#exitApp" />
                         </items>
