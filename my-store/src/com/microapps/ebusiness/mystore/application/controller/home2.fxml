@@ -20,28 +20,29 @@
                     <menus>
                       <Menu mnemonicParsing="false" text="File">
                         <items>
-                          <MenuItem mnemonicParsing="false" text="Export Customer Data" onAction="#exportCustomerDataCsv" />
-                          <MenuItem mnemonicParsing="false" text="Import Customer Data" onAction="#importCustomerDataCsv" />
-                          <MenuItem mnemonicParsing="false" text="Import Item Master" onAction="#importItemMasterDataCsv" />
-                          <MenuItem mnemonicParsing="false" text="Sync Sales Data" onAction="#syncSalesData" />
+                       <!--    <MenuItem mnemonicParsing="false" onAction="#exportCustomerDataCsv" text="Export Customer Data" /> -->
+                          <MenuItem mnemonicParsing="false" onAction="#importCustomerDataCsv" text="Import Customer Data" />
+                          <MenuItem mnemonicParsing="false" onAction="#importItemMasterDataCsv" text="Import Item Master" />
+                          <MenuItem mnemonicParsing="false" onAction="#syncSalesData" text="Sync Sales Data" />
 <!--                               <MenuItem mnemonicParsing="false" text="Backup DB" />
- -->                              <MenuItem mnemonicParsing="false" text="Exit" onAction="#exitApp" />
+ -->                              <MenuItem mnemonicParsing="false" onAction="#exitApp" text="Exit" />
                         </items>
                       </Menu>
                        <Menu mnemonicParsing="false" text="Settings">
                         <items>
-                          <MenuItem mnemonicParsing="false" text="App settings" onAction="#handleAppSettings"/>
+                          <MenuItem mnemonicParsing="false" onAction="#handleAppSettings" text="App settings" />
                         </items>
                       </Menu>
                       <Menu mnemonicParsing="false" text="Metrics">
                         <items>
-                          <MenuItem mnemonicParsing="false" text="Sales report" onAction="#showSalesReport"/>
+                      	  <MenuItem mnemonicParsing="false" onAction="#showSalesReport" text="Sales report" />
+                          <MenuItem mnemonicParsing="false" onAction="#showCustomerChurnReport" text="Customer churn rate" />
                         </items>
                       </Menu>
                       <Menu mnemonicParsing="false" text="Help">
                         <items>
-                          <MenuItem mnemonicParsing="false" text="About" onAction="#showAboutApp" />
-                          <MenuItem mnemonicParsing="false" text="Help document" onAction="#showHelp" /> 
+                          <MenuItem mnemonicParsing="false" onAction="#showAboutApp" text="About" />
+                          <MenuItem mnemonicParsing="false" onAction="#showHelp" text="Help document" /> 
                         </items>
                       </Menu>
                     </menus>
@@ -81,6 +82,7 @@
                               <Separator layoutX="-4.0" layoutY="-1.0" prefWidth="495.0" />
                               <Label alignment="BOTTOM_LEFT" layoutX="7.0" layoutY="2.0" prefHeight="23.0" prefWidth="131.0" text="Total active customers :" textFill="#908080" />
                               <Label fx:id="totalActiveCustomers" alignment="BOTTOM_LEFT" layoutX="141.0" layoutY="2.0" prefHeight="23.0" prefWidth="131.0" textFill="#908080" />
+                              <Hyperlink layoutX="437.0" layoutY="2.0" prefHeight="23.0" prefWidth="45.0" text="Reload" onAction="#reload"/>
                            </children>
                         </Pane>
                         <TableView fx:id="customersTable" prefHeight="322.0" prefWidth="491.0">

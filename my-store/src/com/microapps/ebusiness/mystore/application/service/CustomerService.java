@@ -12,6 +12,7 @@ import com.microapps.ebusiness.mystore.application.dao.exception.DuplicateEntryE
 import com.microapps.ebusiness.mystore.application.dao.exception.RecordNotFoundException;
 import com.microapps.ebusiness.mystore.application.domain.CustomerDto;
 import com.microapps.ebusiness.mystore.application.entity.Customer;
+import com.microapps.ebusiness.mystore.application.exception.CustomerNotFoundException;
 
 public class CustomerService {
 	
@@ -81,14 +82,22 @@ public class CustomerService {
 		CustomerDto c = null;
 		if(query != null) {
 			
-			if(query.length() == 16 ) {
+			if(query.length() > 10 ) {
 				Customer _c = cdao.searchCustomerByCard(query);
 				//c.setActivities(adao.findActivitiesByCustomer(c.getId()));
 				c = CustomerAssembler.toDto(_c);
-			}else {
+				if(c == null) {
+					throw new CustomerNotFoundException("No customer found");
+				}
+			}else if (query.length() == 10 ){
 				Customer _c  = cdao.searchCustomerByMobile(query);
 				//c.setActivities(adao.findActivitiesByCustomer(c.getId()));
 				c = CustomerAssembler.toDto(_c);
+				if(c == null) {
+					throw new CustomerNotFoundException("No customer found");
+				}
+			}else {
+				throw new CustomerNotFoundException("Invalid value");
 			}
 		}
 		Session.getSession().addCustomerToSession(c);

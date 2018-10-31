@@ -220,7 +220,10 @@ public class HomeController extends BaseController implements Initializable, Rou
 		Router.getRouter().route("logout").showView((getStage(event)));
 	}
 	
-	
+	@FXML
+	private void reload(ActionEvent event) {
+		Router.getRouter().route("home").showView((getStage(event)));
+	}
 	
 	@FXML
 	private void createCustomer(ActionEvent event) {
@@ -243,18 +246,19 @@ public class HomeController extends BaseController implements Initializable, Rou
 		progressText.setTextFill(Color.web("#948282"));
 		progressText.setText("Searching...");
 		
-		Task<CustomerDto> task = new Task<CustomerDto>() {
+		Task<Void> task = new Task<Void>() {
 
 			@Override
-			protected CustomerDto call() throws Exception {
-				CustomerDto c = null;
+			protected Void call() throws Exception {
 				try {
-					c = cs.searchCustomer(searchField.getText());
-				} catch (CustomerNotFoundException e) {
-					throw e;
-				}
-				return c;
+					 cs.searchCustomer(searchField.getText());
+					} catch (CustomerNotFoundException e) {
+						throw e;
+					}
+				return null;
 			}
+
+			
 			
 		};
 		 progressIndicator.progressProperty().unbind();
@@ -267,7 +271,6 @@ public class HomeController extends BaseController implements Initializable, Rou
                             progressText.setText("");
                             progressIndicator.setVisible(false);
                             progressIndicator.progressProperty().unbind();
-                            System.out.println("Cusomer >>>> "+ _c.getName());
                             Router.getRouter().route("view-customer").showView((getStage(event)));
                         }
             });

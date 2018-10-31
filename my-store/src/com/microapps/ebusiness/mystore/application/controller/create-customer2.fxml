@@ -20,22 +20,28 @@
                     <menus>
                       <Menu mnemonicParsing="false" text="File">
                         <items>
-                          <MenuItem mnemonicParsing="false" text="Export customer data" onAction="#exportCustomerDataCsv" />
-                          <MenuItem mnemonicParsing="false" text="Import customer data" onAction="#importCustomerDataCsv" />
-                          <MenuItem mnemonicParsing="false" text="Import Item Master" onAction="#importItemMasterDataCsv" />
+                         <!--  <MenuItem mnemonicParsing="false" onAction="#exportCustomerDataCsv" text="Export Customer Data" /> -->
+                          <MenuItem mnemonicParsing="false" onAction="#importCustomerDataCsv" text="Import Customer Data" />
+                          <MenuItem mnemonicParsing="false" onAction="#importItemMasterDataCsv" text="Import Item Master" />
+                          <MenuItem mnemonicParsing="false" onAction="#syncSalesData" text="Sync Sales Data" />
 <!--                               <MenuItem mnemonicParsing="false" text="Backup DB" />
- -->                              <MenuItem mnemonicParsing="false" text="Exit" onAction="#exitApp" />
+ -->                              <MenuItem mnemonicParsing="false" onAction="#exitApp" text="Exit" />
                         </items>
                       </Menu>
                        <Menu mnemonicParsing="false" text="Settings">
                         <items>
-                          <MenuItem mnemonicParsing="false" text="App settings" onAction="#handleAppSettings"/>
+                          <MenuItem mnemonicParsing="false" onAction="#handleAppSettings" text="App settings" />
+                        </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Metrics">
+                        <items>
+                          <MenuItem mnemonicParsing="false" onAction="#showSalesReport" text="Sales report" />
                         </items>
                       </Menu>
                       <Menu mnemonicParsing="false" text="Help">
                         <items>
-                          <MenuItem mnemonicParsing="false" text="About" onAction="#showAboutApp" />
-                           <!-- <MenuItem mnemonicParsing="false" text="Data import template" onAction="#showDataImportTemplate" /> -->
+                          <MenuItem mnemonicParsing="false" onAction="#showAboutApp" text="About" />
+                          <MenuItem mnemonicParsing="false" onAction="#showHelp" text="Help document" /> 
                         </items>
                       </Menu>
                     </menus>

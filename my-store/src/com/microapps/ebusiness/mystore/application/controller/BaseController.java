@@ -48,10 +48,16 @@ public class BaseController{
 		HostServiceUtil.getHostServices().showDocument(this.getClass().getResource("MyShop-v1.0.0-help.docx").toString());
 	}
 	
-	
 	@FXML
 	private void showSalesReport(ActionEvent event) {
 		SalesReportDlgController ac = (SalesReportDlgController) Router.getRouter().route("sales-report");
+		ac.showView(null);
+	}
+	
+	
+	@FXML
+	private void showCustomerChurnReport(ActionEvent event) {
+		CustomerChurnReportDlgController ac = (CustomerChurnReportDlgController) Router.getRouter().route("customer-churn-report");
 		ac.showView(null);
 	}
 	

@@ -39,6 +39,7 @@ public class CustomerAssembler {
 	
 	
 	public static CustomerDto toDto(Customer e) {
+		if(e == null) return null;
 		CustomerDto dto = new CustomerDto();
 		dto.setCardNumber(e.getCardNumber());
 		dto.setCreatedOn(e.getCreatedOn());

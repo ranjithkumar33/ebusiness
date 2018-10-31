@@ -21,6 +21,7 @@ public class Router {
 		contrls.put("sales-report", new SalesReportDlgController());
 		contrls.put("data-import", new CustomerDataImportController());
 		contrls.put("sales-data-sync", new SalesDataSyncController());
+		contrls.put("customer-churn-report", new CustomerChurnReportDlgController());
 	}
 	
 	private static Router router;
