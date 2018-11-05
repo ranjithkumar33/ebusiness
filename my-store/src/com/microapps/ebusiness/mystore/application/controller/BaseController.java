@@ -196,10 +196,10 @@ public class BaseController{
 
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		Image image = new Image(BaseController.class.getResourceAsStream("my-shop-king-ico.png"));
-		ImageView im = new ImageView(image);
-		im.setFitWidth(40);
-		im.setFitHeight(40);
+		//Image image = new Image(BaseController.class.getResourceAsStream("my-shop-king-ico.png"));
+	//	ImageView im = new ImageView(image);
+		//im.setFitWidth(40);
+		//im.setFitHeight(40);
 		//imageLabel.setGraphic(im);
 	}
 	

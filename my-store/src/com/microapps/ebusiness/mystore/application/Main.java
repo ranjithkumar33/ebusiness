@@ -33,6 +33,9 @@ public class Main extends Application {
 
 	    public static void main(final String[] args) {
 	    	LOGGER.info("Starting appplication...");
+	    	
+	    	//System.setProperty("java.util.logging.config.file", "application.properties");
+	    	
 	    	regService = new RegistrationService();
 	    	gs = new GeneralService();
 	        Application.launch(args);
