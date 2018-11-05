@@ -2,6 +2,7 @@ package com.microapps.ebusiness.mystore.application.service;
 
 import com.microapps.ebusiness.mystore.application.domain.AppSettingsDto;
 import com.microapps.ebusiness.mystore.application.domain.CustomerDto;
+import com.microapps.ebusiness.mystore.application.util.License;
 
 public class Session {
     
@@ -12,6 +13,8 @@ public class Session {
 	private CustomerDto c;
 	
 	private AppSettingsDto settings;
+	
+	private License license;
 	
 	private int customerId;
 	
@@ -53,6 +56,16 @@ public class Session {
 
 	public void setSettings(AppSettingsDto settings) {
 		this.settings = settings;
+	}
+
+
+	public License getLicense() {
+		return license;
+	}
+
+
+	public void setLicense(License license) {
+		this.license = license;
 	}
 	
 }

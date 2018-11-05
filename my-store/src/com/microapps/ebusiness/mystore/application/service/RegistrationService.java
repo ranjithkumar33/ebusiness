@@ -1,14 +1,17 @@
 package com.microapps.ebusiness.mystore.application.service;
 
-import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
+import java.time.Period;
+import java.time.ZoneOffset;
 import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import com.microapps.ebusiness.mystore.application.dao.BusinessRegistrationDaoImpl;
@@ -17,16 +20,20 @@ import com.microapps.ebusiness.mystore.application.dao.UserRegistrationDaoImpl;
 import com.microapps.ebusiness.mystore.application.domain.Registration;
 import com.microapps.ebusiness.mystore.application.entity.Business;
 import com.microapps.ebusiness.mystore.application.entity.BusinessUser;
-import com.microapps.ebusiness.mystore.application.exception.BusinessNotRegisteredException;
 import com.microapps.ebusiness.mystore.application.exception.RegistrationFailedException;
+import com.microapps.ebusiness.mystore.application.util.License;
+import com.microapps.ebusiness.mystore.application.util.LicenseType;
 
 public class RegistrationService {
 	
 	private static final Logger LOGGER = Logger.getLogger(RegistrationService.class.getName());
 	
-	private static final String APP_PREF_NAME= "MyShopAppPref";
+	private static final String APP_PREF_NAME= "MyStoreAppLic";
 	
-	private static final String APP_PREF_KEY= "APP_ACT_STS";
+	private static final String APP_LICENSE_ACTIVATION_STATUS= "APP_LIC_ACT_STS";
+	private static final String APP_LICENSE_ACTIVATION_TYPE= "APP_LIC_TYPE";
+	private static final String APP_LICENSE_ACTIVATION_DATETIME= "APP_LIC_DT";
+	private static final String APP_LICENSE_ACTIVATION_EXTENSION_COUNT= "APP_LIC_EXT_CNT";
 	
 	private RegistrationDao businessRegistrationDao;
 	
@@ -38,9 +45,7 @@ public class RegistrationService {
 	}
 	
 	public Registration registerAndActivateBusiness(Registration reg) throws RegistrationFailedException  {
-		
-		validateRegistrationKey(reg.getActivationCode().trim());
-		
+			//validateRegistrationKey(reg.getActivationCode().trim());
 			Business b = new Business();
 			b.setName(reg.getProName());
 			b.setBusinessName(reg.getBussinessName());
@@ -50,24 +55,89 @@ public class RegistrationService {
 			b.setStatus(true);
 			b = businessRegistrationDao.saveBusiness(b);
 			
-			updatePref();
+			updatePref(reg.getActivationCode());
 			
 			return reg;
 	}
 	
-	private void updatePref() {
+	private void updatePref(String licenseTypeName) throws RegistrationFailedException {
 		Preferences prefs = Preferences.userRoot().node(APP_PREF_NAME);
-		prefs.putBoolean(APP_PREF_KEY, true);
+		prefs.putBoolean(APP_LICENSE_ACTIVATION_STATUS, true);
+		prefs.put(APP_LICENSE_ACTIVATION_TYPE, LicenseType.getLicenseTypeByName(licenseTypeName).getCode());
+		prefs.putLong(APP_LICENSE_ACTIVATION_DATETIME, System.currentTimeMillis());
+		prefs.putLong(APP_LICENSE_ACTIVATION_DATETIME, System.currentTimeMillis());
+		prefs.putInt(APP_LICENSE_ACTIVATION_EXTENSION_COUNT, getLicenseExtensionCount(licenseTypeName));
+		
+		checkExpiry(prefs.getLong(APP_LICENSE_ACTIVATION_DATETIME, System.currentTimeMillis()), prefs.get(APP_LICENSE_ACTIVATION_TYPE, null));
 	}
 
 	
-	private boolean isAppActivated() {
+	private int getLicenseExtensionCount(String licenseTypeName) {
 		Preferences prefs = Preferences.userRoot().node(APP_PREF_NAME);
-		return prefs.getBoolean(APP_PREF_KEY, false);
+		int count = prefs.getInt(APP_LICENSE_ACTIVATION_EXTENSION_COUNT, 0) + 1;
+		return count;
 	}
 	
+	public void uninstall() {
+		if(LicenseType.DEMO == Session.getSession().getLicense().getType()) {
+			clearAppPrefs();
+		}
+	}
 	
-	private void validateRegistrationKey(String key) throws RegistrationFailedException{
+	private void clearAppPrefs() {
+		Preferences prefs = Preferences.userRoot().node(APP_PREF_NAME);
+		try {
+			prefs.clear();
+		} catch (BackingStoreException e) {
+			LOGGER.log(Level.WARNING, "Could not clear LIC settings");
+		}
+	}
+
+	private boolean checkExpiry(long regDayTimeInmillis, String licenseCode) throws  RegistrationFailedException {
+		boolean result = false;
+			switch(LicenseType.getLicenseTypeByCode(licenseCode)) {
+				case DEMO: 
+					result = isExpired(LicenseType.DEMO, regDayTimeInmillis);
+					if(!result) {
+						int daysLeft = expiresIn(LicenseType.DEMO, regDayTimeInmillis);
+						Session.getSession().setLicense(new License(LicenseType.DEMO, daysLeft));
+					}
+				break;
+				case TWO_WEEKS_TRAIL: 
+					result = isExpired(LicenseType.TWO_WEEKS_TRAIL, regDayTimeInmillis);
+					if(!result) {
+						int daysLeft = expiresIn(LicenseType.TWO_WEEKS_TRAIL, regDayTimeInmillis);
+						Session.getSession().setLicense(new License(LicenseType.TWO_WEEKS_TRAIL, daysLeft));
+					}
+				break;	
+				case ONE_YEAR_PAID: 
+					result =  isExpired(LicenseType.ONE_YEAR_PAID, regDayTimeInmillis);
+					if(!result) {
+						int daysLeft = expiresIn(LicenseType.ONE_YEAR_PAID, regDayTimeInmillis);
+						Session.getSession().setLicense(new License(LicenseType.ONE_YEAR_PAID, daysLeft));
+					}
+				break;	
+			}
+		return result;
+	}
+	
+	private int expiresIn(LicenseType licenseType, long regDayTimeInmillis) {
+		LocalDateTime regDate = Instant.ofEpochMilli(regDayTimeInmillis).atZone(ZoneOffset.UTC).toLocalDateTime();
+		int daysElapsed = Period.between(regDate.toLocalDate(), LocalDate.now()).getDays();
+		return licenseType.getValidity() - daysElapsed;
+	}
+
+	private boolean isExpired(LicenseType licenseType, long regDayTimeInmillis) {
+		LocalDateTime regDate = Instant.ofEpochMilli(regDayTimeInmillis).atZone(ZoneOffset.UTC).toLocalDateTime();
+		int daysElapsed = Period.between(regDate.toLocalDate(), LocalDate.now()).getDays();
+		if(daysElapsed > licenseType.getValidity()) {
+			return true;
+		}
+		return false;
+	}
+
+
+	/*private void validateRegistrationKey(String key) throws RegistrationFailedException{
 		
 		try {
 			boolean b = isKeyExpired(key);
@@ -79,7 +149,7 @@ public class RegistrationService {
 		}
 		 
 		
-	}
+	}*/
 
 	public void registerUser(String name, String userName, String password) throws RegistrationFailedException  {
 			BusinessUser bu = new BusinessUser();
@@ -95,9 +165,18 @@ public class RegistrationService {
 	}
 	
 
-	public boolean isBusinessRegistered() throws BusinessNotRegisteredException, SQLException {
-		return isAppActivated();
-		
+	public boolean isBusinessRegistered() {
+		Preferences prefs = Preferences.userRoot().node(APP_PREF_NAME);
+		if(prefs.getBoolean(APP_LICENSE_ACTIVATION_STATUS, false)) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	public boolean isLicenseExpired() throws RegistrationFailedException {
+		Preferences prefs = Preferences.userRoot().node(APP_PREF_NAME);
+		return checkExpiry(prefs.getLong(APP_LICENSE_ACTIVATION_DATETIME, System.currentTimeMillis()), prefs.get(APP_LICENSE_ACTIVATION_TYPE, null));
 	}
 	
 	private static boolean isKeyExpired(String key) throws RegistrationFailedException {

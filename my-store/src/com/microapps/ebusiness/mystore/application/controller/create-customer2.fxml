@@ -41,7 +41,7 @@
                       <Menu mnemonicParsing="false" text="Help">
                         <items>
                           <MenuItem mnemonicParsing="false" onAction="#showAboutApp" text="About" />
-                          <MenuItem mnemonicParsing="false" onAction="#showHelp" text="Help document" /> 
+                        <!--   <MenuItem mnemonicParsing="false" onAction="#showHelp" text="Help document" />  -->
                         </items>
                       </Menu>
                     </menus>
@@ -163,7 +163,7 @@
             </Pane>
             <Pane prefHeight="44.0" prefWidth="500.0" style="-fx-background-color: C4C4C4;">
                <children>
-                  <Label alignment="CENTER" contentDisplay="TEXT_ONLY" layoutY="-1.0" lineSpacing="1.0" prefHeight="43.0" prefWidth="500.0" text="Copyright @2018. All rights reserved&#10;Visit us @ facebook/edudotcom" textAlignment="JUSTIFY" textFill="#807d7d">
+                  <Label alignment="CENTER" contentDisplay="TEXT_ONLY" layoutY="-1.0" lineSpacing="1.0" prefHeight="43.0" prefWidth="500.0" text="Copyright @2018. All rights reserved&#10;" textAlignment="JUSTIFY" textFill="#807d7d">
                      <font>
                         <Font size="9.0" />
                      </font>

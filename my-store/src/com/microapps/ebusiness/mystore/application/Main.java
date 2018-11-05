@@ -42,6 +42,7 @@ public class Main extends Application {
 	    public void stop() throws Exception {
 	    	clean();
 	    	backUpDB();
+	    	regService.uninstall();
 	    }
 
 	    
@@ -57,34 +58,28 @@ public class Main extends Application {
 
 		@Override
 	    public void init() throws Exception {
-	    	  startUpDb();
 	    	  FXMLLoader fxmlLoader = null;
-	    	  
-	    	  boolean isBusinessRegistered = false;
-			try {
-				isBusinessRegistered = regService.isBusinessRegistered();
-			} catch (BusinessNotRegisteredException e) {
-				LOGGER.log(Level.WARNING, "Business not registered!", e);
-			}
-	    	  
-	    	  if(!isBusinessRegistered) {
+	    	  if(!regService.isBusinessRegistered()) {
 	    		  fxmlLoader = new FXMLLoader(BaseController.class.getResource(ViewTemplateConstants.BUSINESS_REGISTRATION_VIEW));
 	    	  }else {
-	    		  fxmlLoader = new FXMLLoader(BaseController.class.getResource(ViewTemplateConstants.LOGIN_VIEW));
+	    		  if(regService.isLicenseExpired()) {
+	    			  //Show license update view
+	    		  }else {
+	    			  fxmlLoader = new FXMLLoader(BaseController.class.getResource(ViewTemplateConstants.LOGIN_VIEW));
+	    		  }
 	    	  }
 	    	  
 	          rootNode = fxmlLoader.load();
 	        //  String css = Main.class.getResource("application.css").toExternalForm(); 
 	         // rootNode.getStylesheets().add(css);
-	          
+	          startUpDb();
 	          HostServiceUtil.setHostServices(getHostServices());
 	    }
 
 
 		private void startUpDb() {
-	    	LOGGER.log(Level.INFO, "Connecting DB...");
-				//DBUtils.openDatabase();
-				PersistanceUtil.getInstance().setPersistance();
+	    		LOGGER.log(Level.INFO, "Connecting DB...");
+				gs.initializeDb();
 				LOGGER.log(Level.INFO, "DB connected successfully!");
 				
 				LOGGER.log(Level.INFO, "Run DDL...");

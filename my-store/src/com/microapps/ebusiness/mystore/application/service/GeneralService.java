@@ -2,12 +2,14 @@ package com.microapps.ebusiness.mystore.application.service;
 
 import java.io.IOException;
 
+import com.microapps.ebusiness.mystore.application.dao.PersistanceUtil;
 import com.microapps.ebusiness.mystore.application.dao.SettingsDao;
 import com.microapps.ebusiness.mystore.application.dao.SettingsDaoImpl;
 import com.microapps.ebusiness.mystore.application.dao.SystemDaoImpl;
 import com.microapps.ebusiness.mystore.application.domain.AppSettingsDto;
 import com.microapps.ebusiness.mystore.application.entity.AppSettings;
 import com.microapps.ebusiness.mystore.application.exception.SettingNotFoundException;
+import com.microapps.ebusiness.mystore.application.util.LicenseType;
 
 public class GeneralService {
 	
@@ -42,7 +44,13 @@ public class GeneralService {
 	}
 	
 	public void backupDb() throws IOException {
-		sysdao.backup();
+		if(LicenseType.DEMO != Session.getSession().getLicense().getType()) {
+			sysdao.backup();
+		}
+	}
+	
+	public void initializeDb(){
+		PersistanceUtil.getInstance().setPersistance("my-store-db-demo");
 	}
 
 }
