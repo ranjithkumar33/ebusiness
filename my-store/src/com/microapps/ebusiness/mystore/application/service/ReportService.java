@@ -51,7 +51,7 @@ public class ReportService {
 		
 		if(ma != null) {
 			ma.forEach(a -> {
-				ReportService.DailyRevenue dr = new ReportService.DailyRevenue(a.getCreatedOn().toLocalDateTime().toLocalDate(), a.getRevenue());
+				ReportService.DailyRevenue dr = new ReportService.DailyRevenue(a.getCreatedOn().toLocalDateTime().toLocalDate(), a.getTotalPurchaseAmount());
 				list.add(dr);
 			});
 		}
@@ -61,24 +61,24 @@ public class ReportService {
 	
 	public static class DailyRevenue{
 		
-		public DailyRevenue(LocalDate date, float revenue){
+		public DailyRevenue(LocalDate date, double revenue){
 			this.date=date;
-			this.revenue=revenue;
+			this.sale=revenue;
 		}
 		
-		private float revenue;
+		private double sale;
 		private LocalDate date;
-		public float getRevenue() {
-			return revenue;
-		}
-		public void setRevenue(float revenue) {
-			this.revenue = revenue;
-		}
 		public LocalDate getDate() {
 			return date;
 		}
 		public void setDate(LocalDate date) {
 			this.date = date;
+		}
+		public double getSale() {
+			return sale;
+		}
+		public void setSale(double sale) {
+			this.sale = sale;
 		}
 		
 		

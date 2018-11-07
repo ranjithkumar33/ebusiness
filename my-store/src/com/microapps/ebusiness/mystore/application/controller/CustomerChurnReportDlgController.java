@@ -69,7 +69,7 @@ public class CustomerChurnReportDlgController extends BaseController implements 
         
         if(sd != null) {
         	sd.forEach(r -> {
-        		series.getData().add(new XYChart.Data(DateUtil.toString(r.getDate()), r.getRevenue()));
+        		series.getData().add(new XYChart.Data(DateUtil.toString(r.getDate()), r.getSale()));
         	});
         }
         lineChart.getData().add(series);

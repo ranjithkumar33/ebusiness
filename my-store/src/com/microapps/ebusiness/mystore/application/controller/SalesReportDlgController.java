@@ -55,7 +55,7 @@ public class SalesReportDlgController extends BaseController implements Initiali
 		 final CategoryAxis xAxis = new CategoryAxis();
 	    final NumberAxis yAxis = new NumberAxis();
 	    xAxis.setLabel("Day");    
-	    yAxis.setLabel("Revenue");
+	    yAxis.setLabel("Sale");
 
 	    final LineChart<String,Number> lineChart = 
                 new LineChart<String,Number>(xAxis,yAxis);
@@ -69,7 +69,7 @@ public class SalesReportDlgController extends BaseController implements Initiali
         
         if(sd != null) {
         	sd.forEach(r -> {
-        		series.getData().add(new XYChart.Data(DateUtil.toString(r.getDate()), r.getRevenue()));
+        		series.getData().add(new XYChart.Data(DateUtil.toString(r.getDate()), r.getSale()));
         	});
         }
         lineChart.getData().add(series);
