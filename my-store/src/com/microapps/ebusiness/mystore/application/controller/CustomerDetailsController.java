@@ -2,15 +2,23 @@ package com.microapps.ebusiness.mystore.application.controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import com.microapps.ebusiness.mystore.application.domain.CustomerDto;
 import com.microapps.ebusiness.mystore.application.domain.LoyaltyData;
 import com.microapps.ebusiness.mystore.application.exception.SettingNotFoundException;
+import com.microapps.ebusiness.mystore.application.service.ActivityService;
 import com.microapps.ebusiness.mystore.application.service.LoyalyPointsService;
+import com.microapps.ebusiness.mystore.application.service.ReportService;
 import com.microapps.ebusiness.mystore.application.service.SecurityContext;
 import com.microapps.ebusiness.mystore.application.service.Session;
+import com.microapps.ebusiness.mystore.application.util.CurrencyUtil;
 import com.microapps.ebusiness.mystore.application.util.CustomerNameUtils;
 import com.microapps.ebusiness.mystore.application.util.DateConvertor;
 import com.microapps.ebusiness.mystore.application.util.DateUtil;
@@ -24,15 +32,19 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Side;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class CustomerDetailsController extends BaseController implements Initializable, Routeable{
@@ -95,6 +107,13 @@ public class CustomerDetailsController extends BaseController implements Initial
     
     private LoyalyPointsService ls;
     
+    private ActivityService as;
+    
+    @FXML
+    private BorderPane chartPane;
+    
+    private ReportService rs;
+    
     @FXML
 	private void redeemLoyaltyPointsNow(ActionEvent event) {
     	showLoyaltyPointsRedemptionDialog(event);
@@ -125,6 +144,8 @@ public class CustomerDetailsController extends BaseController implements Initial
 		super.initialize(location, resources);
 		
 		ls = new LoyalyPointsService();
+		rs = new ReportService();
+		as = new ActivityService();
 		
 		Image image = new Image(BaseController.class.getResourceAsStream("my-shop-king-ico.png"));
 		ImageView im = new ImageView(image);
@@ -140,23 +161,46 @@ public class CustomerDetailsController extends BaseController implements Initial
 	
 	public void setCustomerData() {
 		CustomerDto c= Session.getSession().getCustomerFromSession();
-		this.name.setText(CustomerNameUtils.getNameWithTitle(c));
+		this.name.setText(CustomerNameUtils.getNameWithTitle(c)+ " [Sale : "+CurrencyUtil.getFormattedAmount(as.getCustomerTotalSaleAmount())+"]");
 		this.cardNumber.setText(c.getCardNumber());
 		this.mobile.setText(c.getMobile());
 		this.email.setText(c.getEmail());
 		this.gender.setText(Gender.getGender(c.getGender()).toString());
-		this.dob.setText(new DateConvertor().toString(c.getDob().toLocalDate()));
+		if(c.getDob() != null) {
+			this.dob.setText(new DateConvertor().toString(c.getDob().toLocalDate()));
+		}
 		boolean res = setLoyaltyData(c);
 		if(!res) return;
 		setActivityData(c);
+		setChart();
 	}
 
+	private void setChart() {
+		PieChart chart = new PieChart();
+		chart.setTitle("Items-Sales");
+		chart.setStyle("-fx-font: 12px System;");
+		chart.setLabelLineLength(10);
+		chart.setLegendSide(Side.BOTTOM);
+		Map<String, Double> map = rs.getCustomerTotalSaleByItemGroups();
+		List<PieChart.Data> data = new ArrayList<>();
+		map.forEach((k,v)-> {
+			data.add(new PieChart.Data(k, v));
+		});
+		chart.getData().addAll(data);
+		data.forEach(d -> {
+            Tooltip tip = new Tooltip();
+            tip.setText(CurrencyUtil.getFormattedAmount(d.getPieValue()));
+            Tooltip.install(d.getNode(), tip);
+        });
+        chartPane.setCenter(chart);
+	}
+	
 	private boolean setLoyaltyData(CustomerDto c) {
 		try {
 			LoyaltyData ld = ls.computeLoyaltyData(c.getActivities());
 			
 			this.lpAccrued.setText(ld.getEarnedPoints()+"");
-			this.equivalentAmountForRedemption.setText(ld.getEqvAmtOfPointsNeededForRedemption()+" INR");
+			this.equivalentAmountForRedemption.setText(CurrencyUtil.getFormattedAmount(ld.getEqvAmtOfPointsNeededForRedemption()));
 			this.lpRequiredForRedemption.setText(ld.getPointsNeededForRedemption()+"");
 			
 			if(ld.isMaturedForRedemption()) {
@@ -190,6 +234,20 @@ public class CustomerDetailsController extends BaseController implements Initial
 		itemGroupColumn.setCellValueFactory(cellData -> cellData.getValue().getItemGroup());
 		amountColumn.setCellValueFactory(cellData -> cellData.getValue().getAmount().asObject());
 		
+		amountColumn.setCellFactory(column -> {
+			return new TableCell<ActivityView, Double>() {
+		        @Override
+		        protected void updateItem(Double item, boolean empty) {
+		        	
+		        	if (item == null || empty) {
+		        		setText("");
+		            }else {
+		            	setText(CurrencyUtil.getFormattedAmount(item));
+		            }
+		        }
+		    };
+		});
+		
 		dateColumn.setCellFactory(column -> {
 			return new TableCell<ActivityView, LocalDateTime>() {
 		        @Override
@@ -221,7 +279,7 @@ public class CustomerDetailsController extends BaseController implements Initial
 		ac.showView(getStage(event));
 		setLoyaltyData(Session.getSession().getCustomerFromSession());
 		setActivityData(Session.getSession().getCustomerFromSession());
-		
+		setChart();
 	}
 	
 	private void showLoyaltyPointsRedemptionDialog(ActionEvent event) {

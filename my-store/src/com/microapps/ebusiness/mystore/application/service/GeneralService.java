@@ -44,7 +44,7 @@ public class GeneralService {
 	}
 	
 	public void backupDb() throws IOException {
-		if(LicenseType.DEMO != Session.getSession().getLicense().getType()) {
+		if(Session.getSession().getLicense()!= null && LicenseType.DEMO != Session.getSession().getLicense().getType()) {
 			sysdao.backup();
 		}
 	}

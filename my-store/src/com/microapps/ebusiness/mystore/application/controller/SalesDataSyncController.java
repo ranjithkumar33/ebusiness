@@ -68,9 +68,9 @@ public class SalesDataSyncController  extends CustomerDataImportController{
 					
 					
 				} catch (CSVParseException e) {
-					throw e;
+					System.err.println(e);
 				} catch (IOException e) {
-					throw e;
+					System.err.println(e);
 				}
 
                 return null;

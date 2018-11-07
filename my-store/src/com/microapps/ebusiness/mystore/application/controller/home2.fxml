@@ -80,16 +80,16 @@
                         <Pane layoutX="11.0" layoutY="79.0" prefHeight="33.0" prefWidth="491.0">
                            <children>
                               <Separator layoutX="-4.0" layoutY="-1.0" prefWidth="495.0" />
-                              <Label alignment="BOTTOM_LEFT" layoutX="7.0" layoutY="2.0" prefHeight="23.0" prefWidth="131.0" text="Total active customers :" textFill="#908080" />
-                              <Label fx:id="totalActiveCustomers" alignment="BOTTOM_LEFT" layoutX="141.0" layoutY="2.0" prefHeight="23.0" prefWidth="131.0" textFill="#908080" />
-                              <Hyperlink layoutX="437.0" layoutY="2.0" prefHeight="23.0" prefWidth="45.0" text="Reload" onAction="#reload"/>
+                              <Label fx:id="totalActiveCustomers" alignment="BOTTOM_LEFT" layoutX="7.0" layoutY="2.0" prefHeight="23.0" prefWidth="179.0" text="Total customers :" textFill="#3d396b" />
+                              <Label fx:id="totalSale" alignment="BOTTOM_LEFT" layoutX="189.0" layoutY="2.0" prefHeight="23.0" prefWidth="247.0" text="Total Sale :" textFill="#3d396b" />
+                              <Hyperlink layoutX="437.0" layoutY="2.0" onAction="#reload" prefHeight="23.0" prefWidth="45.0" text="Reload" />
                            </children>
                         </Pane>
                         <TableView fx:id="customersTable" prefHeight="322.0" prefWidth="491.0">
                           <columns>
                              <TableColumn fx:id="customerNameColumn" prefWidth="200.0" text="Name" />
-                             <TableColumn fx:id="dateColumn" prefWidth="130.0" text="Since" />
-                             <TableColumn fx:id="amountColumn" prefWidth="150.0" text="Total purchase (INR)" />
+                             <TableColumn fx:id="dateColumn" prefWidth="130.0" text="Created On" />
+                             <TableColumn fx:id="amountColumn" prefWidth="150.0" text="Total Sale" />
                           </columns>
                         </TableView>
                      </children>

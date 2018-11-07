@@ -74,7 +74,7 @@ public class BaseController{
 	@FXML
 	private void showAboutApp() {
 		Alert help = new Alert(AlertType.INFORMATION);
-		help.setContentText("App name : MyShop\nVersion: v1.0.0\nCopyright @2018. All rights reserved");
+		help.setContentText("App name : MyStore\nVersion: v1.0.0\nCopyright @2018. All rights reserved");
 		help.setTitle("About MyShop");
 		help.setHeaderText(null);
 		help.showAndWait();

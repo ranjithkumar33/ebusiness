@@ -79,7 +79,7 @@ public class RegistrationService {
 	}
 	
 	public void uninstall() {
-		if(LicenseType.DEMO == Session.getSession().getLicense().getType()) {
+		if(Session.getSession().getLicense() != null && LicenseType.DEMO == Session.getSession().getLicense().getType()) {
 			clearAppPrefs();
 		}
 	}

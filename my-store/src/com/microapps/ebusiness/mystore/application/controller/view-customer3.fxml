@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.paint.*?>
@@ -59,44 +60,45 @@
                            <children>
                               <Pane prefHeight="153.0" prefWidth="487.0">
                                  <children>
-                                    <Label fx:id="name" layoutX="5.0" prefHeight="20.0" prefWidth="389.0" textFill="#8d8686">
+                                    <Label fx:id="name" layoutX="5.0" prefHeight="27.0" prefWidth="318.0" text="" textFill="#3d396b">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="customerClassIcon" layoutX="420.0" prefHeight="43.0" prefWidth="58.0" text="" />
                                     <AnchorPane prefHeight="134.0" prefWidth="487.0">
                                        <children>
-                                          <VBox layoutY="33.0" prefHeight="115.0" prefWidth="487.0">
+                                          <BorderPane fx:id="chartPane" layoutX="297.0" layoutY="-1.0" prefHeight="151.0" prefWidth="191.0">
+                                           </BorderPane>
+                                          <VBox layoutY="33.0" prefHeight="115.0" prefWidth="302.0">
                                              <children>
                                                 <Pane prefHeight="28.0" prefWidth="449.0">
                                                    <children>
                                                       <Label layoutX="6.0" prefHeight="17.0" prefWidth="87.0" text="Card number :" textFill="#838080" />
-                                                      <Label fx:id="cardNumber" layoutX="105.0" prefHeight="17.0" prefWidth="219.0" text="" textFill="#797272" />
+                                                      <Label fx:id="cardNumber" layoutX="105.0" prefHeight="17.0" prefWidth="199.0" text="" textFill="#797272" />
                                                    </children>
                                                 </Pane>
                                                 <Pane prefHeight="28.0" prefWidth="449.0">
                                                    <children>
                                                       <Label layoutX="6.0" prefHeight="17.0" prefWidth="87.0" text="Mobile :" textFill="#838080" />
-                                                      <Label fx:id="mobile" layoutX="105.0" prefHeight="17.0" prefWidth="219.0" text="" textFill="#797272" />
+                                                      <Label fx:id="mobile" layoutX="105.0" prefHeight="17.0" prefWidth="202.0" text="" textFill="#797272" />
                                                    </children>
                                                 </Pane>
                                                 <Pane prefHeight="28.0" prefWidth="449.0">
                                                    <children>
                                                       <Label layoutX="6.0" prefHeight="17.0" prefWidth="87.0" text="Email :" textFill="#838080" />
-                                                      <Label fx:id="email" layoutX="105.0" prefHeight="17.0" prefWidth="219.0" text="" textFill="#797272" />
+                                                      <Label fx:id="email" layoutX="105.0" prefHeight="17.0" prefWidth="203.0" text="" textFill="#797272" />
                                                    </children>
                                                 </Pane>
                                                 <Pane layoutX="10.0" layoutY="10.0" prefHeight="28.0" prefWidth="449.0">
                                                    <children>
                                                       <Label layoutX="6.0" prefHeight="17.0" prefWidth="87.0" text="DoB :" textFill="#838080" />
-                                                      <Label fx:id="dob" layoutX="105.0" prefHeight="17.0" prefWidth="219.0" text="" textFill="#797272" />
+                                                      <Label fx:id="dob" layoutX="105.0" prefHeight="17.0" prefWidth="203.0" text="" textFill="#797272" />
                                                    </children>
                                                 </Pane>
                                                 <Pane prefHeight="28.0" prefWidth="449.0">
                                                    <children>
                                                       <Label layoutX="6.0" prefHeight="17.0" prefWidth="87.0" text="Gender :" textFill="#838080" />
-                                                      <Label fx:id="gender" layoutX="105.0" prefHeight="17.0" prefWidth="219.0" text="" textFill="#797272" />
+                                                      <Label fx:id="gender" layoutX="105.0" prefHeight="17.0" prefWidth="202.0" text="" textFill="#797272" />
                                                    </children>
                                                 </Pane>
                                              </children>
@@ -121,7 +123,7 @@
                                                    <children>
                                                       <Label layoutX="8.0" layoutY="8.0" prefHeight="17.0" prefWidth="143.0" text="Loyalty points accrued : " textFill="#8d8787" />
                                                       <Label fx:id="lpAccrued" layoutX="210.0" layoutY="8.0" prefHeight="17.0" prefWidth="138.0" text="" textFill="#9a9595" />
-                                                      <Hyperlink fx:id="redeemNowLink" onAction="#redeemLoyaltyPointsNow" visible="false" layoutX="371.0" layoutY="7.0" prefHeight="17.0" prefWidth="85.0" text="Redeem now" />
+                                                      <Hyperlink fx:id="redeemNowLink" layoutX="371.0" layoutY="7.0" onAction="#redeemLoyaltyPointsNow" prefHeight="17.0" prefWidth="85.0" text="Redeem now" visible="false" />
                                                    </children>
                                                 </Pane>
                                                 <Pane layoutX="10.0" layoutY="10.0" prefHeight="34.0" prefWidth="491.0">
@@ -159,7 +161,7 @@
                                                       <TableColumn fx:id="dateColumn" prefWidth="123.0" text="Date" />
                                                       <TableColumn fx:id="activityTypeColumn" prefWidth="120.0" text="Activity" />
                                                       <TableColumn fx:id="itemGroupColumn" prefWidth="120.0" text="Item Group" />
-                                                      <TableColumn fx:id="amountColumn" prefWidth="120.0" text="Amount (INR)" />
+                                                      <TableColumn fx:id="amountColumn" prefWidth="120.0" text="Amount" />
                                                    </columns>
                                                 </TableView>
                                              </children>

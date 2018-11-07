@@ -12,6 +12,7 @@ import com.microapps.ebusiness.mystore.application.service.ActivityService;
 import com.microapps.ebusiness.mystore.application.service.LoyalyPointsService;
 import com.microapps.ebusiness.mystore.application.service.Session;
 import com.microapps.ebusiness.mystore.application.util.ActivityType;
+import com.microapps.ebusiness.mystore.application.util.CurrencyUtil;
 import com.microapps.ebusiness.mystore.application.util.ViewTemplateConstants;
 
 import javafx.fxml.FXML;
@@ -107,7 +108,7 @@ public class RedemptionController extends BaseController implements Initializabl
 			
 			equivalentAmount = ls.calculateEquivalentAmountForRedemption(eligiblePoints);
 			
-			equivalentAmountOfRedemption.setText(equivalentAmount+" INR");
+			equivalentAmountOfRedemption.setText(CurrencyUtil.getFormattedAmount(equivalentAmount));
 			
 		} catch (SettingNotFoundException e1) {
 			showErrorMessage("The Application settings is not done!\nThis is required to calculate the loyalty points.\nPlease go to Menu Settings->App settings");

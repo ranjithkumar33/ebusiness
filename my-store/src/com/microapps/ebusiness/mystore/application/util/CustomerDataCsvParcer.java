@@ -206,7 +206,7 @@ public class CustomerDataCsvParcer implements Parser{
 			CustomerDto c = new CustomerDto();
 			List<String> attList = Arrays.asList(this.attrs);
 			for(String attr : attList) {
-				
+				attr = attr.trim();
 				switch(this.curPos) {
 					case 0 : c.setName(attr);
 					this.curPos++;

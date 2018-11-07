@@ -89,7 +89,7 @@ public class ItemMasterDataCsvParcer {
 			
 			List<String> attList = Arrays.asList(this.attrs);
 			for(String attr : attList) {
-				
+				attr = attr.trim();
 				switch(this.curPos) {
 					case 0 : this.itemGroup = attr;
 					break;

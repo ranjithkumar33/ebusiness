@@ -211,7 +211,7 @@ public class SalesDataCsvParcer implements Parser{
 			if(line==null) throw new CSVParseException("Null line");
 			this.line=line;
 			this.attrs = line.split(DELIMITER);
-			if(this.attrs.length != ATTR_LENGTH) throw new CSVParseException("Invalid data format");
+			if(this.attrs.length != ATTR_LENGTH) throw new CSVParseException("Invalid data format At line : "+line);
 		}
 		
 		
@@ -219,7 +219,7 @@ public class SalesDataCsvParcer implements Parser{
 			ActivityDto a = new ActivityDto();
 			List<String> attList = Arrays.asList(this.attrs);
 			for(String attr : attList) {
-				
+				attr = attr.trim();
 				switch(this.curPos) {
 					case 0 : a.getCustomer().setMobile(attr);
 					this.curPos++;

@@ -144,16 +144,15 @@ public class EditCustomerController extends BaseController implements Initializa
 		c.setEmail(email.getText());
 		c.setMobile(mobile.getText());
 		c.setCardNumber(cardNumber.getText());
-		c.setDob(Date.valueOf(dob.getValue()));
-		
+		if(dob.getValue() != null) {
+			c.setDob(Date.valueOf(dob.getValue()));
+		}
 			try {
 				
 				if(ValidationUtil.validate(c)) {
 					cs.updateCustomer(c);
 					Router.getRouter().route("view-customer").showView(getStage(event));
-					
 				}
-			
 			} catch (DuplicateEntryException | NullPointerException e) {
 				if(e instanceof DuplicateEntryException) {
 					DuplicateEntryField def = DuplicateEntryField.findFieldByKey(((DuplicateEntryException) e).getKey());
@@ -176,6 +175,7 @@ public class EditCustomerController extends BaseController implements Initializa
 				  LOGGER.log(Level.SEVERE, "No values entered!", e.getMessage());
 				  hasValidationError = true;
 				  saveButton.setDisable(true);
+				  
 			}
 			
 	}
@@ -202,7 +202,9 @@ public class EditCustomerController extends BaseController implements Initializa
 		this.email.setText(c.getEmail());
 		this.mobile.setText(c.getMobile());
 		this.cardNumber.setText(c.getCardNumber());
-		this.dob.setValue(c.getDob().toLocalDate());
+		if(null != c.getDob()) {
+			this.dob.setValue(c.getDob().toLocalDate());
+		}
 		
 		 radioGroup = new ToggleGroup();
 		 male.setToggleGroup(radioGroup);
@@ -241,7 +243,7 @@ public class EditCustomerController extends BaseController implements Initializa
 		
 		cardNumber.focusedProperty().addListener((arg0, oldValue, newValue) -> {
 	        if (!newValue) { //when focus lost
-	            if(!cardNumber.getText().matches(UIValidationUtils.REGEX_FOR_CARD_NUMBER)){
+	            if(cardNumber != null & !cardNumber.getText().matches(UIValidationUtils.REGEX_FOR_CARD_NUMBER)){
 	            	  hasValidationError = true;
 	            	  cardError.setVisible(true);
 	            	  cardError.setTextFill(Color.web("#eb3144"));
@@ -340,7 +342,7 @@ public class EditCustomerController extends BaseController implements Initializa
 		
 		email.focusedProperty().addListener((arg0, oldValue, newValue) -> {
 	        if (!newValue) { //when focus lost
-	            if(!email.getText().matches(UIValidationUtils.REGEX_FOR_EMAIL)){
+	            if(email!= null && !email.getText().matches(UIValidationUtils.REGEX_FOR_EMAIL)){
 	            	  hasValidationError = true;
 	            	  emailError.setVisible(true);
 	            	  emailError.setTextFill(Color.web("#eb3144"));

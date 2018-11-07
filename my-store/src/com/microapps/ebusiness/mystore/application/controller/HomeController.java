@@ -3,15 +3,19 @@ package com.microapps.ebusiness.mystore.application.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.microapps.ebusiness.mystore.application.domain.CustomerDto;
 import com.microapps.ebusiness.mystore.application.exception.CustomerNotFoundException;
+import com.microapps.ebusiness.mystore.application.service.ActivityService;
 import com.microapps.ebusiness.mystore.application.service.CustomerService;
 import com.microapps.ebusiness.mystore.application.service.SecurityContext;
+import com.microapps.ebusiness.mystore.application.util.CurrencyUtil;
 import com.microapps.ebusiness.mystore.application.util.CustomerNameUtils;
 import com.microapps.ebusiness.mystore.application.util.DateUtil;
 import com.microapps.ebusiness.mystore.application.util.UIValidationUtils;
@@ -49,9 +53,11 @@ public class HomeController extends BaseController implements Initializable, Rou
 	
 	public HomeController() {
 		cs = new CustomerService();
+		as = new ActivityService();
 	}
 	
 	private CustomerService cs;
+	private ActivityService as;
 	
 	private Parent rootNode;
 	
@@ -87,6 +93,9 @@ public class HomeController extends BaseController implements Initializable, Rou
     
     @FXML
     private Label totalActiveCustomers;
+    
+    @FXML
+    private Label totalSale;
     
     private ObservableList<CustomerView> customers = FXCollections.observableArrayList();
 	
@@ -143,6 +152,20 @@ public class HomeController extends BaseController implements Initializable, Rou
 			dateColumn.setCellValueFactory(cellData -> cellData.getValue().getDate());
 			customerNameColumn.setCellValueFactory(cellData -> cellData.getValue().getName());
 			amountColumn.setCellValueFactory(cellData -> cellData.getValue().getAmount().asObject());
+			
+			amountColumn.setCellFactory(column -> {
+				return new TableCell<CustomerView, Double>() {
+			        @Override
+			        protected void updateItem(Double item, boolean empty) {
+			        	
+			        	if (item == null || empty) {
+			        		setText("");
+			            }else {
+			            	setText(CurrencyUtil.getFormattedAmount(item));
+			            }
+			        }
+			    };
+			});
 			
 			customerNameColumn.setCellFactory(column -> {
 				return new TableCell<CustomerView, String>() {
@@ -205,11 +228,11 @@ public class HomeController extends BaseController implements Initializable, Rou
 			        }
 			    };
 			});
-			
-			totalActiveCustomers.setText(customers.size()+"");
+			NumberFormat formatter = NumberFormat.getNumberInstance(new Locale("en", "IN"));
+			totalActiveCustomers.setText("Total Customers : "+formatter.format(customers.size()));
+			totalSale.setText("Total Sale : "+ CurrencyUtil.getFormattedAmount(as.getTotalSaleAmount()));
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -16,7 +16,7 @@ public class Session {
 	
 	private License license;
 	
-	private int customerId;
+	private long customerId;
 	
 	public static Session getSession() {
 		if(null == session) {
@@ -26,16 +26,6 @@ public class Session {
 	}
 	
 	
-	public int getCustomerId() {
-		return customerId;
-	}
-
-
-	public void setCustomerId(int customerId) {
-		this.customerId = customerId;
-	}
-
-
 	public void addCustomerToSession(CustomerDto c) {
 		this.c=c;
 	}

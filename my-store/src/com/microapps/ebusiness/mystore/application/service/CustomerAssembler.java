@@ -34,6 +34,7 @@ public class CustomerAssembler {
 		e.setId(dto.getId());
 		e.setMobile(dto.getMobile());
 		e.setName(dto.getName());
+		e.setStatus(true);
 		return e;
 	}
 	
