@@ -60,6 +60,8 @@ public class CustomerDto {
 	private Timestamp createdOn;
 	
 	private List<ActivityDto> activities;
+	
+	private boolean isAuthenticated;
 
 	public List<ActivityDto> getActivities() {
 		return activities;
@@ -119,6 +121,14 @@ public class CustomerDto {
 
 	public char getGender() {
 		return gender;
+	}
+
+	public boolean isAuthenticated() {
+		return isAuthenticated;
+	}
+
+	public void setAuthenticated(boolean isAuthenticated) {
+		this.isAuthenticated = isAuthenticated;
 	}
 
 	public void setGender(char gender) {

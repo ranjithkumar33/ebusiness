@@ -50,6 +50,7 @@ public class CustomerAssembler {
 		dto.setId((int)e.getId());
 		dto.setMobile(e.getMobile());
 		dto.setName(e.getName());
+		dto.setAuthenticated(e.isStatus());
 		if(e.getTotalPurchaseAmount() != null) {
 			dto.setTotalPurchaseAmount(e.getTotalPurchaseAmount());
 		}

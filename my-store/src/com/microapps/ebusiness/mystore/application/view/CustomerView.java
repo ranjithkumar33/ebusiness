@@ -19,11 +19,14 @@ public class CustomerView {
     private StringProperty name;
     private ObjectProperty<LocalDate> date;
     
-    public CustomerView(int id, String name, double amount, LocalDateTime date) {
+    private boolean isAuthenticated;
+    
+    public CustomerView(int id, String name, double amount, LocalDateTime date, boolean isAuthenticated) {
     	this.id= new SimpleIntegerProperty(id);
     	this.name = new SimpleStringProperty(name);
     	this.amount = new SimpleDoubleProperty(amount);
     	this.date = new SimpleObjectProperty<LocalDate>(date.toLocalDate());
+    	this.isAuthenticated = isAuthenticated;
     }
 
 	public DoubleProperty getAmount() {

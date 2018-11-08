@@ -44,6 +44,9 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -144,7 +147,7 @@ public class HomeController extends BaseController implements Initializable, Rou
 	private void setCustomerTableView() {
 		try {
 			cs.getAllCustomers().forEach(item -> {
-				customers.add(new CustomerView(item.getId(), CustomerNameUtils.getNameWithTitle(item), item.getTotalPurchaseAmount(), item.getCreatedOn().toLocalDateTime()));
+				customers.add(new CustomerView(item.getId(), CustomerNameUtils.getNameWithTitle(item), item.getTotalPurchaseAmount(), item.getCreatedOn().toLocalDateTime(), item.isAuthenticated()));
 			});
 			
 			customersTable.setItems(customers);
@@ -175,6 +178,7 @@ public class HomeController extends BaseController implements Initializable, Rou
 			        	if (item == null || empty) {
 			        		setText("");
 			            }else {
+			            	
 			            	Hyperlink link = new Hyperlink();
 			            	link.setText(item);
 			            	link.setOnAction(new EventHandler<ActionEvent>() {
@@ -197,21 +201,28 @@ public class HomeController extends BaseController implements Initializable, Rou
 			            				}
 			            				
 			            			};
-			            			
 			            			findCustomerTask.setOnScheduled(value ->{
 			            				
 			            				CustomerDto c = findCustomerTask.getValue();
 				            			
 			            				Router.getRouter().route("view-customer").showView((getStage(e)));
 			            			});
-			            			
 			            			 new Thread(findCustomerTask).start();
-
 			            	    }
 			            	});
-			        		setGraphic(link);
+			            	HBox hb= new HBox();
+			            	hb.setSpacing(10);
+			            	hb.getChildren().add(link);
+			            	if(item.contains("NoName")) {
+			            		Image img = new Image(HomeController.class.getResourceAsStream("alert-bell-notification.png"));
+			            		ImageView iv = new ImageView(img);
+			            		iv.setFitHeight(20);
+			            		iv.setFitWidth(20);
+			            		hb.getChildren().add(iv);
+			            	}
+			        		setGraphic(hb);
 			            }
-			        }
+			        }//BaseController.class.getResource(ViewTemplateConstants.BUSINESS_REGISTRATION_VIEW)
 			    };
 			});
 			
