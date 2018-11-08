@@ -36,7 +36,7 @@
                       <Menu mnemonicParsing="false" text="Metrics">
                         <items>
                       	  <MenuItem mnemonicParsing="false" onAction="#showSalesReport" text="Sales report" />
-                       <!--    <MenuItem mnemonicParsing="false" onAction="#showCustomerChurnReport" text="Customer churn rate" /> -->
+                          <MenuItem mnemonicParsing="false" onAction="#showItemsSale" text="Items sale" />
                         </items>
                       </Menu>
                       <Menu mnemonicParsing="false" text="Help">
@@ -89,7 +89,7 @@
                           <columns>
                              <TableColumn fx:id="customerNameColumn" prefWidth="200.0" text="Name" />
                              <TableColumn fx:id="dateColumn" prefWidth="130.0" text="Created On" />
-                             <TableColumn fx:id="amountColumn" prefWidth="150.0" text="Total Sale" />
+                             <TableColumn fx:id="amountColumn" prefWidth="150.0" text="Sale" />
                           </columns>
                         </TableView>
                      </children>

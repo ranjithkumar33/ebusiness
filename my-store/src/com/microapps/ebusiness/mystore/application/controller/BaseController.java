@@ -56,8 +56,8 @@ public class BaseController{
 	
 	
 	@FXML
-	private void showCustomerChurnReport(ActionEvent event) {
-		CustomerChurnReportDlgController ac = (CustomerChurnReportDlgController) Router.getRouter().route("customer-churn-report");
+	private void showItemsSale(ActionEvent event) {
+		ItemsSaleDlgController ac = (ItemsSaleDlgController) Router.getRouter().route("items-sale");
 		ac.showView(null);
 	}
 	

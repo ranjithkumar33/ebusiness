@@ -161,7 +161,7 @@ public class CustomerDetailsController extends BaseController implements Initial
 	
 	public void setCustomerData() {
 		CustomerDto c= Session.getSession().getCustomerFromSession();
-		this.name.setText(CustomerNameUtils.getNameWithTitle(c)+ " [Sale : "+CurrencyUtil.getFormattedAmount(as.getCustomerTotalSaleAmount())+"]");
+		this.name.setText(CustomerNameUtils.getNameWithTitle(c)+ " ["+CurrencyUtil.getFormattedAmount(as.getCustomerTotalSaleAmount())+"]");
 		this.cardNumber.setText(c.getCardNumber());
 		this.mobile.setText(c.getMobile());
 		this.email.setText(c.getEmail());

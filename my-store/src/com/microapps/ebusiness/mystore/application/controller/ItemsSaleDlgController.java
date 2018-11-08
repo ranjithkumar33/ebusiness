@@ -14,17 +14,17 @@ import com.microapps.ebusiness.mystore.application.util.DateUtil;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class SalesReportDlgController extends BaseController implements Initializable, Routeable{
+public class ItemsSaleDlgController extends BaseController implements Initializable, Routeable{
 	
-	public SalesReportDlgController() {
+	public ItemsSaleDlgController() {
 		rs = new ReportService();
 	}
 
@@ -52,7 +52,7 @@ public class SalesReportDlgController extends BaseController implements Initiali
 	public void showView(Stage stage) {
 		Stage dialogStage = new Stage();
 		
-		dialogStage.setTitle("Sales report");
+		dialogStage.setTitle("Items Sale");
 		dialogStage.initModality(Modality.WINDOW_MODAL);
 		dialogStage.initOwner(stage);
       
@@ -61,26 +61,24 @@ public class SalesReportDlgController extends BaseController implements Initiali
 	    xAxis.setLabel("Day");    
 	    yAxis.setLabel("Sale");
 
-	    final LineChart<String,Number> lineChart = 
-                new LineChart<String,Number>(xAxis,yAxis);
+	    final BarChart<String,Number> bc = 
+	            new BarChart<String,Number>(xAxis,yAxis);
                 
-        lineChart.setTitle("Daily sales");
+        bc.setTitle("Items Sale");
         
-        XYChart.Series series = new XYChart.Series();
-        series.setName(LocalDate.now().getMonth().getDisplayName(TextStyle.FULL, new Locale("en", "IN")));
-        
-        List<ReportService.DailyRevenue> sd =  rs.getMonthlySalesData(0);
+        List<ReportService.DailyItemSale> sd =  rs.getMonthlyItemsSalesData(0);
         
         if(sd != null) {
-        	
-        	sd.stream().filter(e -> LocalDate.now().getMonth().equals(e.getDate().getMonth())).sorted(Comparator.comparing(ReportService.DailyRevenue::getDate)).forEach(r -> {
-        		series.getData().add(new XYChart.Data(DateUtil.toString(r.getDate()), r.getSale()));
+        	sd.forEach(e->{
+        		 XYChart.Series series = new XYChart.Series<>();
+        	     series.setName(e.getItem());
+        	     series.getData().add(new XYChart.Data(DateUtil.toString(e.getDate()), e.getSale()));
+        	     bc.getData().add(series);
         	});
         	
         }
-        lineChart.getData().add(series);
 
-		VBox vbox = new VBox(lineChart);
+		VBox vbox = new VBox(bc);
 		Scene scene = new Scene(vbox, 400, 200);
 		dialogStage.setScene(scene);
 		

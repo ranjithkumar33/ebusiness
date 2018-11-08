@@ -3,8 +3,10 @@ package com.microapps.ebusiness.mystore.application.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.microapps.ebusiness.mystore.application.dao.ActivityDao;
@@ -59,11 +61,59 @@ public class ReportService {
 	}
 	
 	
+	public List<ReportService.DailyItemSale> getMonthlyItemsSalesData(int month){
+		List<ReportService.DailyItemSale>  list = new ArrayList<>();
+		
+		List<Activity> ma = dao.findDailyItemSales();
+		
+		if(ma != null) {
+			ma.stream().filter(ofSameMonth()).sorted(Comparator.comparing(Activity::getCreatedOn)).forEach(r -> {
+				System.out.println(r.getItemGroup()+": "+r.getCreatedOn().toLocalDateTime().toLocalDate()+": "+ r.getAmount());
+				ReportService.DailyItemSale dr = new ReportService.DailyItemSale(r.getItemGroup(), r.getCreatedOn().toLocalDateTime().toLocalDate(), r.getTotalPurchaseAmount());
+				list.add(dr);
+        	});
+		}
+		return list;
+	}
+	
+	private static Predicate<? super Activity> ofSameMonth(){
+		return e->LocalDate.now().getMonth().equals(e.getCreatedOn().toLocalDateTime().toLocalDate().getMonth());
+	}
+	
+	public static class DailyItemSale {
+		public DailyItemSale(String item, LocalDate date, double sale){
+			this.date=date;
+			this.sale=sale;
+			this.item=item;
+		}
+		private double sale;
+		private LocalDate date;
+		private String item;
+		public double getSale() {
+			return sale;
+		}
+		public void setSale(double sale) {
+			this.sale = sale;
+		}
+		public LocalDate getDate() {
+			return date;
+		}
+		public void setDate(LocalDate date) {
+			this.date = date;
+		}
+		public String getItem() {
+			return item;
+		}
+		public void setItem(String item) {
+			this.item = item;
+		}
+	}
+	
 	public static class DailyRevenue{
 		
-		public DailyRevenue(LocalDate date, double revenue){
+		public DailyRevenue(LocalDate date, double sale){
 			this.date=date;
-			this.sale=revenue;
+			this.sale=sale;
 		}
 		
 		private double sale;
